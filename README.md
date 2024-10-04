@@ -1,2 +1,2 @@
-# Split Trigger
-A twin-stick space shooter with a "shoot the orb" teleport mechanic 
+# Ludum Dare 56
+We don't know yet!
