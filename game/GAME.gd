@@ -15,6 +15,8 @@ onready var screen_service: ScreenService = $services/screen_service
 onready var camera_service: CameraService = $services/camera_service
 onready var world_service: WorldService = $services/world_service
 onready var player_service: PlayerService = $services/player_service
+onready var ui_service: UIPresentationService = $services/ui_service
+onready var context_service: ContextPresentationService = $services/context_service
 
 var has_been_initialized = false
 
