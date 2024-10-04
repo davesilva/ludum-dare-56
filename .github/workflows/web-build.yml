@@ -33,7 +33,7 @@ jobs:
           cd build
           zip ../build.zip *
       - name: Upload Artifact
-        uses: actions/upload-artifact@v1
+        uses: actions/upload-artifact@v4
         with:
           name: web
           path: build.zip
@@ -47,7 +47,7 @@ jobs:
       contents: write
     steps:
       - name: Download Artifact
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v4
         with:
           name: web
       - name: Release
