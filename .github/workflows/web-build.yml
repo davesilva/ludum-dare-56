@@ -1,0 +1,57 @@
+name: Godot Web Export
+on: push
+
+env:
+  GODOT_VERSION: 3.5.3
+  EXPORT_NAME: ludum-dare-56
+
+jobs:
+  export-web:
+    name: Web Export
+    runs-on: ubuntu-20.04
+    container:
+      image: davesilva/godot-ci:3.5.3
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v1
+        with:
+          lfs: true
+      - name: Setup
+        run: |
+          mkdir -v -p ~/.local/share/godot/templates/
+          mv /root/.local/share/godot/templates/${GODOT_VERSION}.stable ~/.local/share/godot/templates/${GODOT_VERSION}.stable
+      - name: Web Build
+        run: |
+          mkdir -v -p build
+          godot --no-window --verbose --export "HTML5" build/index.html
+      - name: Edit JS to remove checks for serviceWorker
+        run: |
+          cd build
+          sed -i "s/[\"']serviceWorker[\"'] *in *navigator/false/g" index.js
+      - name: Create ZIP
+        run: |
+          cd build
+          zip ../build.zip *
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v1
+        with:
+          name: web
+          path: build.zip
+
+  release:
+    name: Release
+    needs: export-web
+    runs-on: ubuntu-20.04
+    if: startsWith(github.ref, 'refs/tags/')
+    permissions:
+      contents: write
+    steps:
+      - name: Download Artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: web
+      - name: Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: build.zip
+
