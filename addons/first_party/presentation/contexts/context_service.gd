@@ -26,7 +26,7 @@ func clear_current_context():
 		current_context.queue_free()
 		
 
-func handle_transition_request(context_key):
+func go_to(context_key):
 	if not context_key in _context_scene_dictionary:
 		print("Given context key " + str(context_key) + " does not exist in scene dictionary")
 		return
@@ -58,5 +58,5 @@ func _instance_and_add_context(context_scene: Resource):
 	var context_instance = context_scene.instance()
 	context_instance.on_set_up()
 	context_root.add_child(context_instance)
-	context_instance.connect("transition_to_other_context", self, "handle_transition_request")
+	context_instance.connect("transition_to_other_context", self, "go_to")
 	current_context = context_instance

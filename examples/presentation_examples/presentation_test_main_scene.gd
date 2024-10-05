@@ -15,4 +15,4 @@ func _ready():
 		
 	PresentationServices.context_service.context_root = context_root
 	PresentationServices.context_service.load_with_context_scene_dictionary(context_scene_dictionary)
-	PresentationServices.context_service.handle_transition_request("title")
+	PresentationServices.context_service.go_to("title")
