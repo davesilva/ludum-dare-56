@@ -12,9 +12,16 @@ onready var last_direction = Vector2.ZERO
 
 func get_current_direction() -> Vector2:
 	return last_direction
+	
+	
+func can_check_for_new_direction() -> bool:
+	return true
 
 
 func _process(delta):
+	if not can_check_for_new_direction():
+		return
+	
 	var new_vector = Vector2.ZERO
 	
 	match movement_freedom:
@@ -47,8 +54,6 @@ func _eight_way_vector() -> Vector2:
 		return last_direction
 		
 	return input_vector
-	
-
 	
 		
 func _add_to_vector(base_vector: Vector2, additional_vector: Vector2) -> Vector2:
