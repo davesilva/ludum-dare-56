@@ -52,6 +52,7 @@ func move():
 	move_to_tile_position(next_tile_position, speed)
 	move_segments()
 	current_direction = next_direction
+	emit_signal("completed_body_move")
 	
 	
 func move_segments():
@@ -95,6 +96,9 @@ func _get_a_star_next_direction():
 	if route_to_target[0] == tile_position:
 		route_to_target.remove(0)
 	if route_to_target.empty():
+		return _get_backup_direction()
+	if route_to_target[0] - tile_position == -1 * current_direction:
+		var asd = Game.world_service.check_tile_disabled(route_to_target[0])
 		return _get_backup_direction()
 	var dir = route_to_target[0] - tile_position
 	return dir

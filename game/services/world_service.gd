@@ -35,7 +35,7 @@ func on_game_initialize() -> void:
 	initialize_a_star()
 
 func connect_snake_signals(snake_head: SnakeHead) -> void:
-	snake_head.connect("completed_move", self, "_on_snake_completed_move")
+	snake_head.connect("completed_body_move", self, "_on_snake_completed_move")
 	
 	for p in a_star.get_points():
 		var point_label = Label.new()
@@ -102,6 +102,9 @@ func calculate_route_between_points(from: Vector2, to: Vector2) -> PoolVector2Ar
 
 func tile_pos_to_idx(p: Vector2) -> int:
 	return p.y * WIDTH + p.x
+
+func check_tile_disabled(p: Vector2) -> bool:
+	return a_star.is_point_disabled(tile_pos_to_idx(p))
 
 #func destroy_all_enemies() -> void:
 #	var enemies = get_tree().get_nodes_in_group(Game.groups.roots.enemy)
