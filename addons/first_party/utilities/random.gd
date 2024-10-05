@@ -64,3 +64,8 @@ static func evaluate_in_chance(numerator: int, denominator: int) -> bool:
 	var random_value = randf()
 		
 	return random_value >= threshold
+	
+	
+static func color(saturation: float = 1, value: float = 1, alpha: float = 1) -> Color:
+	var random_hue = randf_range(0, 1)
+	return Color.from_hsv(random_hue, saturation, value, alpha)

@@ -176,7 +176,7 @@ func unregister_player(id):
 	emit_signal("player_list_changed")
 
 
-remote func pre_start_game(spawn_point_indices):
+remote func pre_start_game(spawn_point_indices, colors: Array):
 	context_service.go_to(GameplayContext.CONTEXT_ID, false)
 	var player_scene = load("res://game/entities/player/player.tscn")
 
@@ -188,6 +188,7 @@ remote func pre_start_game(spawn_point_indices):
 		player.set_name(str(p_id)) # Use unique ID as node name.
 		player.position=spawn_pos
 		player.set_network_master(p_id) #set unique id as master.
+		player.set_player_color(colors[p_id])
 
 		if p_id == get_tree().get_network_unique_id():
 			# If node for this peer id, set name.
@@ -257,7 +258,9 @@ func begin_game():
 	for p in players:
 		rpc_id(p, "pre_start_game", spawn_point_indices)
 
-	pre_start_game(spawn_point_indices)
+#	var colors = create_color_array(spawn_point_indices.size())
+	var colors = create_color_array(4)
+	pre_start_game(spawn_point_indices, colors)
 
 
 func end_game():
@@ -266,3 +269,18 @@ func end_game():
 
 	emit_signal("game_ended")
 	players.clear()
+	
+	
+func create_color_array(number_of_colors: int) -> Array:
+	var hue_value_separation = 1.0 / float(number_of_colors)
+	var next_color = Random.color(0.5, 0.9)
+	var color_array = []
+	for index in number_of_colors:
+		color_array.append(next_color)
+		var next_hue = next_color.h + hue_value_separation
+		if next_hue > 1.0:
+			next_hue -= 1.0
+				
+		next_color = Color.from_hsv(next_hue, next_color.s, next_color.v)
+	
+	return color_array

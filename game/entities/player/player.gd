@@ -1,6 +1,6 @@
 extends KinematicBody2D
 
-const SPEED = 90.0
+const SPEED = 250.0
 
 puppet var puppet_pos = Vector2()
 puppet var puppet_motion = Vector2()
@@ -36,3 +36,7 @@ func _physics_process(_delta):
 
 func set_player_name(name):
 	player_name = name
+	
+
+func set_player_color(color: Color):
+	$body_sprite.self_modulate = color
