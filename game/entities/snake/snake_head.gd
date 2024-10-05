@@ -13,10 +13,10 @@ var should_move = true
 
 func _ready():
 	place_at_tile_position(tile_position)
-	target_tile_position = _get_random_tile_position()
 	connect("completed_move", self, "_on_completed_move")
 	add_to_group(Game.groups.roots.snake)
 	Game.world_service.connect_snake_signals(self)
+	Game.events.game_round.connect("new_target_placed", self, "_on_new_target_placed")
 
 
 func _process(delta):
@@ -66,26 +66,27 @@ func move_segments():
 			
 		previous_segment_position = snake_segment.tile_position
 		snake_segment.move_to_tile_position(next_segment_position, speed)
-		next_segment_position = previous_segment_position
-	
+		next_segment_position = previous_segment_position	
+
 	
 func _on_completed_move(old_tile_position: Vector2, new_tile_position: Vector2) -> void:
 	should_move = true
 	
-
 func _get_backup_direction():
 	if current_direction == Vector2.UP and tile_position.y == 0 or current_direction == Vector2.DOWN and tile_position.y == 5:
 		if tile_position.x == 0:
 			return Vector2.RIGHT
 		else:
 			return Vector2.LEFT
-	if current_direction == Vector2.LEFT and tile_position.x == 0 or current_direction == Vector2.RIGHT and tile_position.y == 9:
+	if current_direction == Vector2.LEFT and tile_position.x == 0 or current_direction == Vector2.RIGHT and tile_position.x == 9:
 		if tile_position.y == 0:
 			return Vector2.DOWN
 		else:
 			return Vector2.UP
 	return current_direction
 
+func _on_new_target_placed(p_target_tile_position: Vector2) -> void:
+	target_tile_position = p_target_tile_position
 
 func _get_a_star_next_direction():
 	var route_to_target = Game.world_service.calculate_route_between_points(tile_position, target_tile_position)
@@ -133,7 +134,6 @@ func _get_random_tile_position() -> Vector2:
 	
 	
 func _target_captured() -> void:
-	target_tile_position = _get_random_tile_position()
 	var spawned_tile_position = previous_tile_position
 	var segment_children = segments_parent.get_children()
 	
@@ -146,4 +146,6 @@ func _target_captured() -> void:
 	var snake_segment_node = segment_scene.instance()
 	segments_parent.add_child(snake_segment_node)
 	snake_segment_node.place_at_tile_position(spawned_tile_position)
+	Game.events.snake.emit_signal("target_captured")
+	
 
