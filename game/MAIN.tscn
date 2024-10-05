@@ -1,12 +1,14 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://game/MAIN.gd" type="Script" id=1]
 [ext_resource path="res://game/contexts/title_context/title_context.tscn" type="PackedScene" id=2]
 [ext_resource path="res://game/contexts/gameplay_context/gameplay_context.tscn" type="PackedScene" id=3]
+[ext_resource path="res://game/contexts/lobby_context/lobby_context.tscn" type="PackedScene" id=4]
 
 [node name="MAIN" type="Node"]
 script = ExtResource( 1 )
 title_context_scene = ExtResource( 2 )
+lobby_context_scene = ExtResource( 4 )
 gameplay_context_scene = ExtResource( 3 )
 
 [node name="context_root" type="Node" parent="."]

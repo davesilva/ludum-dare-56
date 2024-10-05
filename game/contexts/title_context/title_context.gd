@@ -19,4 +19,4 @@ func _on_start_clicked():
 	
 func _on_go_to_game_pressed():
 	print('hello')
-	change_context(GameplayContext.CONTEXT_ID)
+	change_context(LobbyContext.CONTEXT_ID)
