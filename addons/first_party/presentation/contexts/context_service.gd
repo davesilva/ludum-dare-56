@@ -26,7 +26,7 @@ func clear_current_context():
 		current_context.queue_free()
 		
 
-func go_to(context_key):
+func go_to(context_key, is_deferred: bool = true):
 	if not context_key in _context_scene_dictionary:
 		print("Given context key " + str(context_key) + " does not exist in scene dictionary")
 		return
@@ -36,7 +36,7 @@ func go_to(context_key):
 		print("Scene for key " + str(context_key) + " is not a Resource")
 		return
 		
-	transition_to_context(context_scene, true)
+	transition_to_context(context_scene, is_deferred)
 		
 		
 func transition_to_context(context_scene: Resource, is_deferred: bool):

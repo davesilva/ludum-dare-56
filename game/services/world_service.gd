@@ -2,6 +2,8 @@ extends GameService
 class_name WorldService
 
 var world_tile_map: TileMap = null
+var spawn_points: Array = []
+var players: Node2D = null
 #var top_most_world_node: Node2D = null
 
 func get_global_tile_position(tile_position: Vector2) -> Vector2:

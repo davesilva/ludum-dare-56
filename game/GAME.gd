@@ -176,27 +176,27 @@ func unregister_player(id):
 	emit_signal("player_list_changed")
 
 
-remote func pre_start_game(spawn_points):
-	context_service.go_to(GameplayContext.CONTEXT_ID)
+remote func pre_start_game(spawn_point_indices):
+	context_service.go_to(GameplayContext.CONTEXT_ID, false)
+	var player_scene = load("res://game/entities/player/player.tscn")
 
-	#var player_scene = load("res://player.tscn")
+	for p_id in spawn_point_indices:
+		var spawn_point_index = spawn_point_indices[p_id]
+		var spawn_pos = Game.world_service.spawn_points[spawn_point_index].position
+		var player = player_scene.instance()
 
-	#for p_id in spawn_points:
-	#	var spawn_pos = world.get_node("SpawnPoints/" + str(spawn_points[p_id])).position
-	#	var player = player_scene.instance()
+		player.set_name(str(p_id)) # Use unique ID as node name.
+		player.position=spawn_pos
+		player.set_network_master(p_id) #set unique id as master.
 
-	#	player.set_name(str(p_id)) # Use unique ID as node name.
-	#	player.position=spawn_pos
-	#	player.set_network_master(p_id) #set unique id as master.
+		if p_id == get_tree().get_network_unique_id():
+			# If node for this peer id, set name.
+			player.set_player_name(player_name)
+		else:
+			# Otherwise set name from peer.
+			player.set_player_name(players[p_id])
 
-	#	if p_id == get_tree().get_network_unique_id():
-	#		# If node for this peer id, set name.
-	#		player.set_player_name(player_name)
-	#	else:
-	#		# Otherwise set name from peer.
-	#		player.set_player_name(players[p_id])
-
-	#	world.get_node("Players").add_child(player)
+		Game.world_service.players.add_child(player)
 
 	if not get_tree().is_network_server():
 		# Tell server we are ready to start.
@@ -246,18 +246,18 @@ func get_player_name():
 func begin_game():
 	assert(get_tree().is_network_server())
 
-	# Create a dictionary with peer id and respective spawn points, could be improved by randomizing.
-	var spawn_points = {}
-	spawn_points[1] = 0 # Server in spawn point 0.
+	# Create a dictionary with peer id and respective spawn point index
+	var spawn_point_indices = {}
+	spawn_point_indices[1] = 0 # Server in spawn point 0.
 	var spawn_point_idx = 1
 	for p in players:
-		spawn_points[p] = spawn_point_idx
+		spawn_point_indices[p] = spawn_point_idx
 		spawn_point_idx += 1
 	# Call to pre-start game with the spawn points.
 	for p in players:
-		rpc_id(p, "pre_start_game", spawn_points)
+		rpc_id(p, "pre_start_game", spawn_point_indices)
 
-	pre_start_game(spawn_points)
+	pre_start_game(spawn_point_indices)
 
 
 func end_game():

@@ -14,12 +14,7 @@ func _ready():
 	Game.connect("player_list_changed", self, "refresh_lobby")
 	Game.connect("game_ended", self, "_on_game_ended")
 	Game.connect("game_error", self, "_on_game_error")
-	# Set the player name according to the system username. Fallback to the path.
-	if OS.has_environment("USERNAME"):
-		$Connect/Name.text = OS.get_environment("USERNAME")
-	else:
-		var desktop_path = OS.get_system_dir(0).replace("\\", "/").split("/")
-		$Connect/Name.text = desktop_path[desktop_path.size() - 2]
+	$Connect/Name.text = "Player"
 
 
 func _on_host_pressed():
@@ -93,6 +88,3 @@ func refresh_lobby():
 func _on_start_pressed():
 	Game.begin_game()
 
-
-func _on_find_public_ip_pressed():
-	OS.shell_open("https://icanhazip.com/")
