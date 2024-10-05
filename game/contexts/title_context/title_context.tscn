@@ -12,3 +12,12 @@ anchor_right = 0.6
 anchor_bottom = 0.8
 margin_top = -20.0
 text = "START"
+
+[node name="single_player_button" type="Button" parent="."]
+anchor_left = 0.4
+anchor_top = 0.7
+anchor_right = 0.6
+anchor_bottom = 0.8
+margin_top = 81.0
+margin_bottom = 101.0
+text = "SINGLE PLAYER"
