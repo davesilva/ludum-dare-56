@@ -4,7 +4,8 @@ class_name SnakeHead
 signal completed_body_move()
 
 export (PackedScene) var segment_scene
-export (float) var speed = 3 # tiles per second
+export (float) var min_speed = 2 # tiles per second
+export (float) var max_speed = 6 # tiles per second
 
 onready var segments_parent: Node2D = $segments_parent
 onready var current_direction = Vector2.RIGHT
@@ -48,12 +49,17 @@ func _input(event):
 	if not is_opposite_direction:
 		next_direction = input_vector
 		
+
+func get_speed() -> float:
+	var calculated_speed = min_speed + (0.2 * segments_parent.get_child_count())
+	return 	clamp(calculated_speed, min_speed, max_speed)
+
 		
 func move():
 	should_move = false
 	next_direction = _get_a_star_next_direction()
 	var next_tile_position = tile_position + next_direction
-	rpc("move_to_tile_position", next_tile_position, speed)
+	rpc("move_to_tile_position", next_tile_position, get_speed())
 	move_segments()
 	current_direction = next_direction
 	Game.events.snake.emit_signal("completed_body_move")
@@ -84,7 +90,7 @@ func move_segments():
 			continue
 			
 		previous_segment_position = snake_segment.tile_position
-		snake_segment.move_to_tile_position(next_segment_position, speed)
+		snake_segment.move_to_tile_position(next_segment_position, get_speed())
 		next_segment_position = previous_segment_position
 		
 	if is_network_master():
@@ -102,7 +108,7 @@ puppet func sync_segments(positions_array: Array) -> void:
 			_add_new_segment(tile_position)
 		elif index < segments.size():
 			var segment = segments[index] as SnakeSegment
-			segment.move_to_tile_position(tile_position, speed)
+			segment.move_to_tile_position(tile_position, get_speed())
 
 	
 func _on_completed_move(old_tile_position: Vector2, new_tile_position: Vector2) -> void:
