@@ -133,6 +133,7 @@ func tile_pos_to_idx(p: Vector2) -> int:
 func check_tile_disabled(p: Vector2) -> bool:
 	return a_star.is_point_disabled(tile_pos_to_idx(p))
 
+
 #func destroy_all_enemies() -> void:
 #	var enemies = get_tree().get_nodes_in_group(Game.groups.roots.enemy)
 #	for enemy in enemies:

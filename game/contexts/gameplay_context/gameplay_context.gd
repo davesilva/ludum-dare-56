@@ -17,6 +17,8 @@ func _ready():
 	Game.events.snake.connect("target_captured", self, "_on_target_captured")
 	Game.events.snake.connect("snake_doomed", self, "_on_snake_doomed")
 	Game.events.player.connect("player_picked_up_apple", self, "_on_player_picked_up_apple")
+	Game.connect("player_connected", self, "_on_player_connected")
+	Game.connect("player_disconnected", self, "_on_player_disconnected")
 
 
 func _process(delta):
@@ -44,6 +46,16 @@ func _on_snake_doomed() -> void:
 func _on_player_picked_up_apple() -> void:
 	place_target()
 	
+func _on_player_connected(id) -> void:
+	print('PLAYER CONNECTED')
+	pass
+
+func _on_player_disconnected(id) -> void:
+	var player_nodes = Game.world_service.players.get_children()
+	for player_node in player_nodes:
+		if player_node.get_name() == str(id):
+			player_node.queue_free()
+	pass
 
 puppetsync func _respawn_snake() -> void:
 	var snake = Game.entity_service.get_snake_root_node()

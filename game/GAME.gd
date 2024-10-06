@@ -24,6 +24,8 @@ signal connection_failed()
 signal connection_succeeded()
 signal game_ended()
 signal game_error(what)
+signal player_connected(id)
+signal player_disconnected(id)
 
 # Default game server port. Can be any number between 1024 and 49151.
 # Not on the list of registered or common ports as of November 2020:
@@ -142,19 +144,25 @@ func _get_services_children() -> Array:
 
 # Callback from SceneTree.
 func _player_connected(id):
+	emit_signal("player_connected", id)
 	# Registration of a client beings here, tell the connected player that we are here.
 	rpc_id(id, "register_player", player_name)
 
 
 # Callback from SceneTree.
 func _player_disconnected(id):
+	var name = players[id]
+	print("Player " + str(id) + " (" + name + ") disconnected")
+	emit_signal("player_disconnected", id)
+	unregister_player(id)
 	if has_node("/root/MAIN/context_root/GameContext"): # Game is in progress.
-		if get_tree().is_network_server():
-			emit_signal("game_error", "Player " + players[id] + " disconnected")
+		emit_signal("game_error", "Player " + name + " disconnected")
+		print("Remaining players:")
+		print(players)
+		if get_tree().is_network_server() and players.size() < 1:
+			print("Ending game...")
 			end_game()
-	else: # Game is not in progress.
-		# Unregister this player.
-		unregister_player(id)
+
 
 
 # Callback from SceneTree, only for clients (not server).
@@ -179,13 +187,14 @@ func _connected_fail():
 
 remote func register_player(new_player_name):
 	var id = get_tree().get_rpc_sender_id()
-	print(id)
+	print("Player connected: " + str(id))
 	players[id] = new_player_name
 	emit_signal("player_list_changed")
 
 
 func unregister_player(id):
 	players.erase(id)
+	print("Player disconnected: " + str(id))
 	emit_signal("player_list_changed")
 
 
@@ -281,6 +290,7 @@ remote func begin_game():
 		rpc_id(1, "begin_game")
 		return
 	assert(get_tree().is_network_server())
+	print("Starting game...")
 
 	# Create a dictionary with peer id and respective spawn point index
 	var spawn_point_indices = {}
