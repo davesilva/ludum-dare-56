@@ -43,6 +43,8 @@ var player_name = "The Warrior"
 # Names for remote players in id:name format.
 var players = {}
 var players_ready = []
+var spawn_point_indices = {}
+var colors = []
 
 var has_been_initialized = false
 var dedicated_server = false
@@ -233,6 +235,21 @@ remote func post_start_game():
 	get_tree().set_pause(false) # Unpause and unleash the game!
 
 
+remote func spawn_late_joiner(p_id, spawn_point_index, color):
+	var player_scene = load("res://game/entities/player/player.tscn")
+	var player = player_scene.instance()
+	var spawn_pos = Game.world_service.spawn_points[spawn_point_index].position
+
+	player.set_name(str(p_id)) # Use unique ID as node name.
+	player.spawn_point=spawn_pos
+	player.position=spawn_pos
+	player.set_network_master(p_id) #set unique id as master.
+	player.set_player_color(color)
+	player.set_player_name(players[p_id])
+	
+	Game.world_service.players.add_child(player)
+
+
 remote func ready_to_start(id):
 	assert(get_tree().is_network_server())
 
@@ -290,10 +307,22 @@ remote func begin_game():
 		rpc_id(1, "begin_game")
 		return
 	assert(get_tree().is_network_server())
+	if context_service.current_context.context_id_string() == GameplayContext.CONTEXT_ID: # Game is in progress.
+		var new_player_id = get_tree().get_rpc_sender_id()
+		print("Player " + str(new_player_id) + " joined a game in progress")
+		var spawn_point_idx = spawn_point_indices.values().max() + 1
+		spawn_point_indices[new_player_id] = spawn_point_idx
+		rpc_id(new_player_id, "pre_start_game", spawn_point_indices, colors)
+		
+		for p in players:
+			if p != new_player_id:
+				rpc_id(p, "spawn_late_joiner", new_player_id, spawn_point_idx, colors[spawn_point_idx])
+		spawn_late_joiner(new_player_id, spawn_point_idx, colors[spawn_point_idx])
+		return
 	print("Starting game...")
 
 	# Create a dictionary with peer id and respective spawn point index
-	var spawn_point_indices = {}
+	spawn_point_indices = {}
 	var spawn_point_idx = 0
 	if not dedicated_server:
 		spawn_point_indices[1] = 0 # Server in spawn point 0.
@@ -304,8 +333,8 @@ remote func begin_game():
 		spawn_point_idx += 1
 		
 #	var colors = create_color_array(spawn_point_indices.size())
-	var colors = create_color_array(4)
-		
+	colors = create_color_array(4)
+	
 	# Call to pre-start game with the spawn points.
 	for p in players:
 		rpc_id(p, "pre_start_game", spawn_point_indices, colors)
