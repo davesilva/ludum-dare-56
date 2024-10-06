@@ -1,7 +1,7 @@
 extends KinematicBody2D
 class_name Player
 
-const SPEED = 250.0
+const SPEED = 100.0
 
 puppet var puppet_pos = Vector2()
 puppet var puppet_motion = Vector2()

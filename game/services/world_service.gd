@@ -4,8 +4,8 @@ class_name WorldService
 var world_tile_map: TileMap = null
 var spawn_points: Array = []
 var players: Node2D = null
-var WIDTH = 10
-var HEIGHT = 6
+var WIDTH = 32
+var HEIGHT = 18
 var a_star = AStar2D.new()
 #var top_most_world_node: Node2D = null
 
@@ -25,14 +25,14 @@ func initialize_a_star() -> void:
 		var connected_points = a_star.get_point_connections(p)
 #		print_debug(str(p) + " is connected to " + str(connected_points))
 	# Add walls
-	var walls = [11, 24, 37, 47, 57]
+	var wall_tiles = world_tile_map.get_used_cells_by_id(1)
+	var walls = []
+	for wt in wall_tiles:
+		walls.append(tile_pos_to_idx(wt))
 	for w in walls:
 		remove_point(w)
 		
 	return
-
-func on_game_initialize() -> void:
-	initialize_a_star()
 
 func connect_snake_signals(snake_head: SnakeHead) -> void:
 	if not Game.events.snake.is_connected("completed_body_move", self, "_on_snake_completed_move"):

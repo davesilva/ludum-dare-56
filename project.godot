@@ -540,6 +540,12 @@ EventBus="*res://addons/first_party/event_bus/event_bus.tscn"
 PresentationServices="*res://addons/first_party/presentation/presentation_services.tscn"
 Game="*res://game/GAME.tscn"
 
+[display]
+
+window/size/width=1280
+window/size/height=720
+window/size/resizable=false
+
 [editor_plugins]
 
 enabled=PoolStringArray(  )
