@@ -85,7 +85,7 @@ margin_right = 57.0
 margin_bottom = 80.0
 size_flags_horizontal = 2
 size_flags_vertical = 0
-text = "IP:"
+text = "Hostname or IP:"
 
 [node name="IPAddress" type="LineEdit" parent="Connect"]
 margin_left = 17.0
@@ -94,7 +94,7 @@ margin_right = 173.0
 margin_bottom = 109.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
-text = "127.0.0.1"
+text = "ld56.dmsilva.com"
 
 [node name="Host" type="Button" parent="Connect"]
 margin_left = 181.0
