@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://addons/first_party/components/movement/movement_2d.gd" type="Script" id=1]
 [ext_resource path="res://addons/first_party/components/movement/direction/wasd_direction_calculator_2d.gd" type="Script" id=2]
@@ -7,7 +7,10 @@
 [ext_resource path="res://addons/first_party/components/movement/speed/speed_calculator.gd" type="Script" id=5]
 [ext_resource path="res://game/entities/snake/snake_segment.tscn" type="PackedScene" id=6]
 
-[node name="SNAKE" type="Node2D"]
+[sub_resource type="RectangleShape2D" id=1]
+extents = Vector2( 50, 50 )
+
+[node name="SNAKE" type="Area2D"]
 script = ExtResource( 3 )
 segment_scene = ExtResource( 6 )
 
@@ -31,3 +34,8 @@ top_speed = 500.0
 [node name="wasd" type="Node" parent="movement"]
 script = ExtResource( 2 )
 maintain_last_direction = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource( 1 )
+
+[connection signal="body_entered" from="." to="." method="_on_SNAKE_body_entered"]

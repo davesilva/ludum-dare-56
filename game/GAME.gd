@@ -186,6 +186,7 @@ remote func pre_start_game(spawn_point_indices, colors: Array):
 		var player = player_scene.instance()
 
 		player.set_name(str(p_id)) # Use unique ID as node name.
+		player.spawn_point=spawn_pos
 		player.position=spawn_pos
 		player.set_network_master(p_id) #set unique id as master.
 		player.set_player_color(colors[spawn_point_index])

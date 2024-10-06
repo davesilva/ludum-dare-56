@@ -1,14 +1,17 @@
 extends KinematicBody2D
+class_name Player
 
 const SPEED = 250.0
 
 puppet var puppet_pos = Vector2()
 puppet var puppet_motion = Vector2()
+var spawn_point = Vector2()
 
 var player_name = "Player"
 
 func _ready():
 	puppet_pos = position
+	Game.events.snake.connect("caught_player", self, "_have_been_caught")
 
 func _physics_process(_delta):
 	var motion = Vector2()
@@ -40,3 +43,10 @@ func set_player_name(name):
 
 func set_player_color(color: Color):
 	$body_sprite.self_modulate = color
+
+func _have_been_caught(body):
+	if is_network_master():
+		if body == self:
+			position = spawn_point
+			rset("puppet_motion", Vector2())
+			rset("puppet_pos", position)

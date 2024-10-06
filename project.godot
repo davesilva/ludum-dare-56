@@ -254,6 +254,11 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://game/services/pause_service.gd"
 }, {
+"base": "KinematicBody2D",
+"class": "Player",
+"language": "GDScript",
+"path": "res://game/entities/player/player.gd"
+}, {
 "base": "BaseTweenTransformFeedback2D",
 "class": "PositionFeedback2D",
 "language": "GDScript",
@@ -484,6 +489,7 @@ _global_script_class_icons={
 "Movement2D": "",
 "Normalizer": "",
 "PauseService": "",
+"Player": "",
 "PositionFeedback2D": "",
 "QueueFreeFeedback": "",
 "Random": "",

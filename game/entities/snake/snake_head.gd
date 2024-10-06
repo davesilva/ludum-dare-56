@@ -173,3 +173,6 @@ puppetsync func _add_new_segment(segment_tile_position: Vector2) -> void:
 	var snake_segment_node = segment_scene.instance()
 	segments_parent.add_child(snake_segment_node)
 	snake_segment_node.place_at_tile_position(segment_tile_position)
+
+func _on_SNAKE_body_entered(body):
+	Game.events.snake.emit_signal("caught_player", body)
