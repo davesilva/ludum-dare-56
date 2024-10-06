@@ -61,16 +61,34 @@ func move_segments():
 	var next_segment_position = tile_position
 	var previous_segment_position
 	
+	var segment_tile_positions = []
 	var segments = segments_parent.get_children()
 	for segment_child in segments:
+		segment_tile_positions.append(next_segment_position)
 		var snake_segment = segment_child as SnakeSegment
 		if not snake_segment:
 			continue
 			
 		previous_segment_position = snake_segment.tile_position
-		snake_segment.rpc("move_to_tile_position", next_segment_position, speed)
-#		snake_segment.move_to_tile_position(next_segment_position, speed)
-		next_segment_position = previous_segment_position	
+		snake_segment.move_to_tile_position(next_segment_position, speed)
+		next_segment_position = previous_segment_position
+		
+	if is_network_master():
+		rpc("sync_segments", segment_tile_positions)
+	
+		
+puppet func sync_segments(positions_array: Array) -> void:
+	# given an array of positions, set, add (and maybe delete) any segments 
+	var segments = segments_parent.get_children()
+	# TODO: if there are mre segments than positions we need to handle that
+	for index in positions_array.size():
+		var tile_position = positions_array[index]
+		
+		if index >= segments.size():
+			_add_new_segment(tile_position)
+		elif index < segments.size():
+			var segment = segments[index] as SnakeSegment
+			segment.move_to_tile_position(tile_position, speed)
 
 	
 func _on_completed_move(old_tile_position: Vector2, new_tile_position: Vector2) -> void:
