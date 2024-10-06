@@ -188,7 +188,7 @@ remote func pre_start_game(spawn_point_indices, colors: Array):
 		player.set_name(str(p_id)) # Use unique ID as node name.
 		player.position=spawn_pos
 		player.set_network_master(p_id) #set unique id as master.
-		player.set_player_color(colors[p_id])
+		player.set_player_color(colors[spawn_point_index])
 
 		if p_id == get_tree().get_network_unique_id():
 			# If node for this peer id, set name.
@@ -254,12 +254,14 @@ func begin_game():
 	for p in players:
 		spawn_point_indices[p] = spawn_point_idx
 		spawn_point_idx += 1
-	# Call to pre-start game with the spawn points.
-	for p in players:
-		rpc_id(p, "pre_start_game", spawn_point_indices)
-
+		
 #	var colors = create_color_array(spawn_point_indices.size())
 	var colors = create_color_array(4)
+		
+	# Call to pre-start game with the spawn points.
+	for p in players:
+		rpc_id(p, "pre_start_game", spawn_point_indices, colors)
+
 	pre_start_game(spawn_point_indices, colors)
 
 

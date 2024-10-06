@@ -1,6 +1,8 @@
 extends SnakeSegment
 class_name SnakeHead
 
+signal completed_body_move()
+
 export (PackedScene) var segment_scene
 export (float) var speed = 3 # tiles per second
 
