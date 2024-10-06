@@ -7,7 +7,7 @@ signal completed_body_move()
 
 export (PackedScene) var segment_scene
 export (float) var min_speed = 2 # tiles per second
-export (float) var max_speed = 6 # tiles per second
+export (float) var max_speed = 4 # tiles per second
 
 onready var segments_parent: Node2D = $segments_parent
 onready var current_direction = Vector2.RIGHT
@@ -56,7 +56,7 @@ func _input(event):
 		
 
 func get_speed() -> float:
-	var calculated_speed = max_speed - (0.2 * segments_parent.get_child_count())
+	var calculated_speed = max_speed - (0.3 * segments_parent.get_child_count())
 	return 	clamp(calculated_speed, min_speed, max_speed)
 
 
