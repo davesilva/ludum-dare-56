@@ -15,6 +15,11 @@ func _ready():
 	Game.connect("game_ended", self, "_on_game_ended")
 	Game.connect("game_error", self, "_on_game_error")
 	$Connect/Name.text = "Player"
+	if OS.has_feature("web"):
+		$Connect/Host.hide()
+		$Connect/IPLabel.hide()
+		$Connect/IPAddress.hide()
+
 
 
 func _on_host_pressed():

@@ -13,6 +13,8 @@ func context_id_string() -> String:
 func _ready():
 	start_button.connect("pressed", self, "_on_start_clicked")
 	single_player_button.connect("pressed", self, "_on_single_player_clicked")
+	if OS.has_feature("web"):
+		single_player_button.hide()
 	
 	
 func _on_start_clicked():
