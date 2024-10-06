@@ -31,7 +31,7 @@ signal game_error(what)
 const DEFAULT_PORT = 10567
 
 # Max number of players.
-const MAX_PEERS = 12
+const MAX_PEERS = 4
 
 var peer = null
 
@@ -43,6 +43,7 @@ var players = {}
 var players_ready = []
 
 var has_been_initialized = false
+var dedicated_server = false
 
 func _ready():
 	initialize_services()
@@ -52,6 +53,10 @@ func _ready():
 	get_tree().connect("connection_failed", self, "_connected_fail")
 	get_tree().connect("server_disconnected", self, "_server_disconnected")
 	
+	if "--server" in OS.get_cmdline_args():
+		print("Dedicated server mode")
+		dedicated_server = true
+		host_game("Server")
 	
 func run_at(time_scale: float) -> TimeService.TimeBlock:
 	return TimeService.TimeBlock.new(time_scale, time_service)
@@ -125,7 +130,6 @@ func _get_services_children() -> Array:
 	else:
 		return []
 
-# vvv FROM MULTIPLAYER DEMO vvv
 
 # Callback from SceneTree.
 func _player_connected(id):
@@ -245,13 +249,19 @@ func get_player_name():
 	return player_name
 
 
-func begin_game():
+remote func begin_game():
+	if not get_tree().is_network_server():
+		rpc_id(1, "begin_game")
+		return
 	assert(get_tree().is_network_server())
 
 	# Create a dictionary with peer id and respective spawn point index
 	var spawn_point_indices = {}
-	spawn_point_indices[1] = 0 # Server in spawn point 0.
-	var spawn_point_idx = 1
+	var spawn_point_idx = 0
+	if not dedicated_server:
+		spawn_point_indices[1] = 0 # Server in spawn point 0.
+		spawn_point_idx = 1
+	
 	for p in players:
 		spawn_point_indices[p] = spawn_point_idx
 		spawn_point_idx += 1
