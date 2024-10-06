@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://addons/first_party/components/movement/movement_2d.gd" type="Script" id=1]
 [ext_resource path="res://addons/first_party/components/movement/direction/wasd_direction_calculator_2d.gd" type="Script" id=2]
@@ -6,8 +6,12 @@
 [ext_resource path="res://addons/first_party/assets/basic_2d_assets/polygons/square/square_filled.png" type="Texture" id=4]
 [ext_resource path="res://addons/first_party/components/movement/speed/speed_calculator.gd" type="Script" id=5]
 [ext_resource path="res://game/entities/snake/snake_segment.tscn" type="PackedScene" id=6]
+[ext_resource path="res://addons/first_party/components/areas/trigger_zone.gd" type="Script" id=7]
 
 [sub_resource type="RectangleShape2D" id=1]
+extents = Vector2( 50, 50 )
+
+[sub_resource type="RectangleShape2D" id=2]
 extents = Vector2( 50, 50 )
 
 [node name="SNAKE" type="Area2D"]
@@ -38,5 +42,11 @@ maintain_last_direction = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource( 1 )
+
+[node name="hurtbox" type="Area2D" parent="."]
+script = ExtResource( 7 )
+
+[node name="collision_shape_2d" type="CollisionShape2D" parent="hurtbox"]
+shape = SubResource( 2 )
 
 [connection signal="body_entered" from="." to="." method="_on_SNAKE_body_entered"]

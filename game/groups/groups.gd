@@ -33,6 +33,7 @@ class Shapes:
 	
 	
 class Hitboxes:
+	const explosion = "group.hitbox.explosion"
 #	const player_bullet = "group.hitbox.player.bullet"
 #	const player_teleport = "group.hitbox.player.teleport"
 #	const enemy_bullet = "group.hitbox.enemy.bullet"
@@ -40,6 +41,8 @@ class Hitboxes:
 	
 	
 class Hurtboxes:
+	const player = "group.hurtbox.player"
+	const snake = "group.hurtbox.snake"
 #	const player = "group.hurtbox.player"
 #	const enemy = "group.hurtbox.enemy"
 #	const logo = "group.hitbox.logo"

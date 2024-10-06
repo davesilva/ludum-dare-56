@@ -9,6 +9,8 @@ puppet var puppet_pos = Vector2()
 puppet var puppet_motion = Vector2()
 var spawn_point = Vector2()
 
+onready var hurtbox: TriggerZone = $hurtbox
+
 var player_name = "Player"
 
 var has_bomb = false
@@ -16,6 +18,9 @@ var has_bomb = false
 func _ready():
 	puppet_pos = position
 	Game.events.snake.connect("caught_player", self, "_have_been_caught")
+	add_to_group(Game.groups.roots.player_character)
+	hurtbox.add_to_group(Game.groups.hurtboxes.player)
+
 
 func _physics_process(_delta):
 	var motion = Vector2()
@@ -87,3 +92,8 @@ func _on_pickup_hotbox_area_entered(area):
 	elif area.is_in_group(Game.groups.hotboxes.pickup_bomb):
 		has_bomb = true
 		print("picked up bomb")
+
+
+func _on_hurtbox_area_entered(area):
+	if area.is_in_group(Game.groups.hitboxes.explosion):
+		print("player hurt by bomb")

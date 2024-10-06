@@ -645,6 +645,9 @@ toggle_mute={
 2d_physics/layer_1="Default"
 2d_physics/layer_2="PlayerPickupHotBox"
 2d_physics/layer_3="PickupHotBox"
+2d_physics/layer_4="PlayerHurtBox"
+2d_physics/layer_5="ExplosionHitBox"
+2d_physics/layer_6="SnakeSegmentHurtBox"
 
 [physics]
 

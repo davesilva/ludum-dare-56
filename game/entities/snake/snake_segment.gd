@@ -7,6 +7,10 @@ onready var previous_tile_position = Vector2.ZERO
 onready var tile_position = Vector2.ZERO
 
 puppet var puppet_tile_position: Vector2
+
+func _ready():
+	$hurtbox.add_to_group(Game.groups.hurtboxes.snake)
+	
 		
 puppetsync func move_to_tile_position(p_tile_position: Vector2, tween_speed: float) -> void:
 	var old_tile_position = tile_position
@@ -22,3 +26,8 @@ puppetsync func move_to_tile_position(p_tile_position: Vector2, tween_speed: flo
 func place_at_tile_position(give_tile_position: Vector2) -> void:
 	tile_position = give_tile_position
 	Game.world_service.place_object_at_tile_position(self, tile_position)
+
+
+func _on_hurtbox_area_entered(area):
+	if area.is_in_group(Game.groups.hitboxes.explosion):
+		print("snake hit by explosion")
