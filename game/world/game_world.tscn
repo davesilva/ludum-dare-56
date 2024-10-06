@@ -1,8 +1,9 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://addons/first_party/assets/basic_2d_assets/polygons/square/square_regular_40.png" type="Texture" id=1]
 [ext_resource path="res://addons/first_party/assets/basic_2d_assets/polygons/square/square_filled_40.png" type="Texture" id=2]
 [ext_resource path="res://game/world/game_world.gd" type="Script" id=3]
+[ext_resource path="res://game/items/pickup_bomb.tscn" type="PackedScene" id=4]
 
 [sub_resource type="ConvexPolygonShape2D" id=2]
 points = PoolVector2Array( 0, 0, 40, 0, 40, 40, 0, 40 )
@@ -72,3 +73,21 @@ position = Vector2( 850, 150 )
 position = Vector2( 50, 50 )
 
 [node name="players" type="Node2D" parent="."]
+
+[node name="BombPickup" parent="." instance=ExtResource( 4 )]
+position = Vector2( 540, 540 )
+scale = Vector2( 0.3, 0.3 )
+
+[node name="BombPickup2" parent="." instance=ExtResource( 4 )]
+position = Vector2( 980, 340 )
+scale = Vector2( 0.3, 0.3 )
+
+[node name="BombPickup3" parent="." instance=ExtResource( 4 )]
+position = Vector2( 579, 60 )
+scale = Vector2( 0.3, 0.3 )
+
+[node name="BombPickup4" parent="." instance=ExtResource( 4 )]
+position = Vector2( 60, 220 )
+scale = Vector2( 0.3, 0.3 )
+
+[node name="spawn_root" type="Node2D" parent="."]

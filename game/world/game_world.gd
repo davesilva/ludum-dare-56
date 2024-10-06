@@ -10,3 +10,4 @@ func _ready():
 	Game.world_service.initialize_a_star()
 	Game.world_service.spawn_points = spawn_points.get_children()
 	Game.world_service.players = players
+	

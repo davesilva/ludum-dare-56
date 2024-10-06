@@ -1,6 +1,8 @@
 extends KinematicBody2D
 class_name Player
 
+export (PackedScene) var bomb_scene
+
 const SPEED = 100.0
 
 puppet var puppet_pos = Vector2()
@@ -8,6 +10,8 @@ puppet var puppet_motion = Vector2()
 var spawn_point = Vector2()
 
 var player_name = "Player"
+
+var has_bomb = false
 
 func _ready():
 	puppet_pos = position
@@ -25,6 +29,9 @@ func _physics_process(_delta):
 			motion += Vector2(0, -1)
 		if Input.is_action_pressed("standard_move_down"):
 			motion += Vector2(0, 1)
+			
+		if Input.is_action_just_pressed("ui_accept") and has_bomb:
+			_place_bomb()
 
 		rset("puppet_motion", motion)
 		rset("puppet_pos", position)
@@ -56,8 +63,19 @@ func _have_been_caught(body):
 			position = spawn_point
 			rset("puppet_motion", Vector2())
 			rset("puppet_pos", position)
-
-
+		
+			
+func _place_bomb():
+	var bomb_instance = bomb_scene.instance()
+	if Game.world_service.gameplay_spawn_root:
+		Game.world_service.gameplay_spawn_root.add_child(bomb_instance)
+	else:
+		get_tree().root.add_child(bomb_instance)
+		
+	bomb_instance.global_position = global_position
+	has_bomb = false
+	
+	
 func _on_wave_sequencer_new_value(value):
 	$body_sprite.rotation_degrees = value
 
@@ -65,3 +83,6 @@ func _on_wave_sequencer_new_value(value):
 func _on_pickup_hotbox_area_entered(area):
 	if area.is_in_group(Game.groups.hotboxes.pickup_apple):
 		Game.events.player.emit_signal("player_picked_up_apple")
+	elif area.is_in_group(Game.groups.hotboxes.pickup_bomb):
+		has_bomb = true
+		print("picked up bomb")

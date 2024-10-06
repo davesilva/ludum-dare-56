@@ -29,6 +29,16 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://examples/event_bus_examples/rgb_buddies/blue_sprite.gd"
 }, {
+"base": "Node2D",
+"class": "Bomb",
+"language": "GDScript",
+"path": "res://game/items/bomb.gd"
+}, {
+"base": "Pickup",
+"class": "BombPickup",
+"language": "GDScript",
+"path": "res://game/items/pickup_bomb.gd"
+}, {
 "base": "Component",
 "class": "BoolSequencer",
 "language": "GDScript",
@@ -454,6 +464,8 @@ _global_script_class_icons={
 "BaseFeedback": "",
 "BaseTweenTransformFeedback2D": "",
 "BlueSprite": "",
+"Bomb": "",
+"BombPickup": "",
 "BoolSequencer": "",
 "CameraService": "",
 "ClickableArea2D": "",

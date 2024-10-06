@@ -7,7 +7,7 @@ var players: Node2D = null
 var WIDTH = 32
 var HEIGHT = 18
 var a_star = AStar2D.new()
-#var top_most_world_node: Node2D = null
+var gameplay_spawn_root: Node2D = null
 
 func initialize_a_star() -> void:
 	var i = 0
