@@ -98,6 +98,14 @@ func _process(delta):
 	if not has_been_initialized:
 		return
 	
+	if peer != null:
+		if get_tree().is_network_server():
+			if peer.is_listening():
+				peer.poll()
+		else:
+			if peer.get_connection_status() == NetworkedMultiplayerPeer.CONNECTION_CONNECTED or peer.get_connection_status() == NetworkedMultiplayerPeer.CONNECTION_CONNECTING:
+				peer.poll()
+	
 	var service_children = _get_services_children()
 	for child in service_children:
 		var service = child as GameService
@@ -234,17 +242,19 @@ func begin_single_player_game():
 	get_tree().set_network_peer(peer)
 	begin_game()
 
+
 func host_game(new_player_name):
 	player_name = new_player_name
-	peer = NetworkedMultiplayerENet.new()
-	peer.create_server(DEFAULT_PORT, MAX_PEERS)
-	get_tree().set_network_peer(peer)
+	peer = WebSocketServer.new()
+	peer.listen(DEFAULT_PORT, PoolStringArray(), true)
+	get_tree().set_network_peer(peer);
 
 
 func join_game(ip, new_player_name):
 	player_name = new_player_name
-	peer = NetworkedMultiplayerENet.new()
-	peer.create_client(ip, DEFAULT_PORT)
+	peer = WebSocketClient.new()
+	var url = "ws://" + ip + ":" + str(DEFAULT_PORT)
+	var error = peer.connect_to_url(url, PoolStringArray(), true)
 	get_tree().set_network_peer(peer)
 
 
