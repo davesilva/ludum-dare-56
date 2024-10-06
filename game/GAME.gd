@@ -44,6 +44,7 @@ var player_name = "The Warrior"
 var players = {}
 var players_ready = []
 var spawn_point_indices = {}
+var available_spawn_point_indices = []
 var colors = []
 
 var has_been_initialized = false
@@ -148,20 +149,22 @@ func _get_services_children() -> Array:
 func _player_connected(id):
 	emit_signal("player_connected", id)
 	# Registration of a client beings here, tell the connected player that we are here.
-	rpc_id(id, "register_player", player_name)
+	if not dedicated_server:
+		rpc_id(id, "register_player", player_name)
 
 
 # Callback from SceneTree.
 func _player_disconnected(id):
-	var name = players[id]
+	var name = players.get(id, "<UNKNOWN>")
 	print("Player " + str(id) + " (" + name + ") disconnected")
 	emit_signal("player_disconnected", id)
 	unregister_player(id)
 	if has_node("/root/MAIN/context_root/GameContext"): # Game is in progress.
 		emit_signal("game_error", "Player " + name + " disconnected")
+		var remaining_players = get_tree().get_network_connected_peers()
 		print("Remaining players:")
-		print(players)
-		if get_tree().is_network_server() and players.size() < 1:
+		print(remaining_players)
+		if get_tree().is_network_server() and remaining_players.size() < 1:
 			print("Ending game...")
 			end_game()
 
@@ -171,6 +174,10 @@ func _player_disconnected(id):
 func _connected_ok():
 	# We just connected to a server
 	emit_signal("connection_succeeded")
+	var p_id = get_tree().get_network_unique_id()
+	print("My peer id is " + str(p_id))
+	players[p_id] = player_name + " (You)"
+	emit_signal("player_list_changed")
 
 
 # Callback from SceneTree, only for clients (not server).
@@ -196,6 +203,11 @@ remote func register_player(new_player_name):
 
 func unregister_player(id):
 	players.erase(id)
+	var index = spawn_point_indices.get(id, null)
+	if index != null:
+		available_spawn_point_indices.push_back(index)
+	spawn_point_indices.erase(id)
+	colors.erase(id)
 	print("Player disconnected: " + str(id))
 	emit_signal("player_list_changed")
 
@@ -309,36 +321,47 @@ remote func begin_game():
 	assert(get_tree().is_network_server())
 	if context_service.current_context.context_id_string() == GameplayContext.CONTEXT_ID: # Game is in progress.
 		var new_player_id = get_tree().get_rpc_sender_id()
-		print("Player " + str(new_player_id) + " joined a game in progress")
-		var spawn_point_idx = spawn_point_indices.values().max() + 1
+		var spawn_point_idx = available_spawn_point_indices.pop_back()
+		if spawn_point_idx == null:
+			get_tree().network_peer.disconnect_peer(new_player_id)
+			print("Player " + str(new_player_id) + " kicked because game is full")
+			return
+		print("Player " + str(new_player_id) + " joined a game in progress with spawn point " + str(spawn_point_idx))
 		spawn_point_indices[new_player_id] = spawn_point_idx
 		rpc_id(new_player_id, "pre_start_game", spawn_point_indices, colors)
 		
 		for p in players:
 			if p != new_player_id:
+				print("Spawning late joiner " + str(new_player_id) + " on " + str(p))
 				rpc_id(p, "spawn_late_joiner", new_player_id, spawn_point_idx, colors[spawn_point_idx])
+		
+		print("Spawning late joiner " + str(new_player_id) + " on server")
 		spawn_late_joiner(new_player_id, spawn_point_idx, colors[spawn_point_idx])
 		return
 	print("Starting game...")
-
+	
 	# Create a dictionary with peer id and respective spawn point index
 	spawn_point_indices = {}
-	var spawn_point_idx = 0
+	available_spawn_point_indices = [3,2,1,0]
+	colors = create_color_array(available_spawn_point_indices.size())
+	players_ready = []
 	if not dedicated_server:
-		spawn_point_indices[1] = 0 # Server in spawn point 0.
-		spawn_point_idx = 1
+		spawn_point_indices[1] = available_spawn_point_indices.pop_back() # Server in spawn point 0.
 	
 	for p in players:
-		spawn_point_indices[p] = spawn_point_idx
-		spawn_point_idx += 1
-		
-#	var colors = create_color_array(spawn_point_indices.size())
-	colors = create_color_array(4)
+		var idx = available_spawn_point_indices.pop_back()
+		if idx == null:
+			print("Player " + str(p) + " kicked because game is full")
+			get_tree().network_peer.disconnect_peer(p)
+		else:
+			spawn_point_indices[p] = idx
+			print("Player " + str(p) + " got spawn point " + str(idx))
 	
 	# Call to pre-start game with the spawn points.
 	for p in players:
+		print("Starting game on " + str(p))
 		rpc_id(p, "pre_start_game", spawn_point_indices, colors)
-
+	
 	pre_start_game(spawn_point_indices, colors)
 
 

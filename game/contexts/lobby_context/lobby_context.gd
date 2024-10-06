@@ -80,11 +80,10 @@ func refresh_lobby():
 	var players = Game.get_player_list()
 	players.sort()
 	$Players/List.clear()
-	$Players/List.add_item(Game.get_player_name() + " (You)")
 	for p in players:
 		$Players/List.add_item(p)
 	
-	$Players/Start.disabled = players.size() < 2 and not get_tree().is_network_server()
+	$Players/Start.disabled = false
 
 
 func _on_start_pressed():
