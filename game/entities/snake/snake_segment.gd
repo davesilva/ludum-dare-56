@@ -2,6 +2,7 @@ extends Node2D
 class_name SnakeSegment
 
 signal completed_move(old_tile_position, new_tile_position)
+signal take_damage(amount)
 
 onready var previous_tile_position = Vector2.ZERO
 onready var tile_position = Vector2.ZERO
@@ -31,3 +32,8 @@ func place_at_tile_position(give_tile_position: Vector2) -> void:
 func _on_hurtbox_area_entered(area):
 	if area.is_in_group(Game.groups.hitboxes.explosion):
 		print("snake hit by explosion")
+		trigger_take_damage(5)
+
+
+func trigger_take_damage(amount: int) -> void:
+	emit_signal("take_damage", amount)

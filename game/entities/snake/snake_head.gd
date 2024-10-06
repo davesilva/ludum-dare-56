@@ -1,6 +1,8 @@
 extends SnakeSegment
 class_name SnakeHead
 
+const MAX_HEALTH = 100
+
 signal completed_body_move()
 
 export (PackedScene) var segment_scene
@@ -11,7 +13,9 @@ onready var segments_parent: Node2D = $segments_parent
 onready var current_direction = Vector2.RIGHT
 onready var next_direction = Vector2.ZERO
 onready var target_tile_position = Vector2.ZERO
+onready var health_bar: ProgressBar = $health_bar
 
+var hit_points = MAX_HEALTH
 var should_move = true
 
 func _ready():
@@ -29,6 +33,7 @@ func _process(delta):
 		move()
 		
 	_draw_line()
+	health_bar.value = get_hit_point_percentage()
 		
 		
 func _input(event):
@@ -51,8 +56,32 @@ func _input(event):
 		
 
 func get_speed() -> float:
-	var calculated_speed = min_speed + (0.2 * segments_parent.get_child_count())
+	var calculated_speed = max_speed - (0.2 * segments_parent.get_child_count())
 	return 	clamp(calculated_speed, min_speed, max_speed)
+
+
+func get_hit_points() -> int: 
+	return hit_points
+	
+	
+func get_hit_point_percentage() -> float:
+	return float(hit_points) / float(MAX_HEALTH)
+
+
+func trigger_take_damage(amount: int) -> void:
+	var head_amount = amount * 3
+	emit_signal("take_damage", head_amount)
+#	rpc("take_damage", head_amount)
+	take_damage(head_amount)
+	
+	
+func _on_segment_take_damage(amount: int) -> void:
+#	rpc("take_damage", head_amount)
+	take_damage(amount)
+	
+	
+puppetsync func take_damage(amount: int) -> void:
+	hit_points -= amount
 
 		
 func move():
@@ -193,6 +222,10 @@ puppetsync func _add_new_segment(segment_tile_position: Vector2) -> void:
 	var snake_segment_node = segment_scene.instance()
 	segments_parent.add_child(snake_segment_node)
 	snake_segment_node.place_at_tile_position(segment_tile_position)
+	var snake_segment = snake_segment_node as SnakeSegment
+	if snake_segment:
+		snake_segment.connect("take_damage", self, "_on_segment_take_damage")
+
 
 func _on_SNAKE_body_entered(body):
 	Game.events.snake.emit_signal("caught_player", body)

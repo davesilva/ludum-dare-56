@@ -8,20 +8,20 @@ export (PackedScene) var explosion_scene
 
 onready var sprite: Sprite = $sprite
 
-var flashes_remaining = 10
+var flashes_remaining = 6
 
 func _ready():
 	sprite.self_modulate = black_color
 
 func _on_flash_sequencer_new_value(value):
-	if flashes_remaining > 5:
+	if flashes_remaining > 3:
 		sprite.self_modulate = red_color if value else black_color
-	elif flashes_remaining == 5:
+	elif flashes_remaining == 3:
 		$flash_sequencer.disable()
 		$flash_sequencer.update_time_between_toggles(0.07)
 		$flash_sequencer.enable()
 		sprite.self_modulate = red_color	
-	elif flashes_remaining < 5:
+	elif flashes_remaining < 3:
 		sprite.self_modulate = white_color if value else red_color
 
 	if value:
