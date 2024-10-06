@@ -32,6 +32,9 @@ func _physics_process(_delta):
 		position = puppet_pos
 		motion = puppet_motion
 	
+	$wave_sequencer.enabled = motion != Vector2.ZERO
+	if motion != Vector2.ZERO:
+		$body_sprite.scale.x = -1 if motion.x < 0 else 1
 	move_and_slide(motion * SPEED)
 	if not is_network_master():
 		puppet_pos = position # To avoid jitter
@@ -44,9 +47,14 @@ func set_player_name(name):
 func set_player_color(color: Color):
 	$body_sprite.self_modulate = color
 
+
 func _have_been_caught(body):
 	if is_network_master():
 		if body == self:
 			position = spawn_point
 			rset("puppet_motion", Vector2())
 			rset("puppet_pos", position)
+
+
+func _on_wave_sequencer_new_value(value):
+	$body_sprite.rotation_degrees = value
