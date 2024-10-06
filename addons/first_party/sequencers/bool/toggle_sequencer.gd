@@ -3,7 +3,7 @@ class_name ToggleSequencer
 
 export (bool) var starting_value
 export (float) var time_between_toggles
-export (bool) var auto_start = false
+export (bool) var auto_start = false 
 
 var current_value
 var timer
@@ -18,6 +18,12 @@ func enable():
 func disable():
 	.disable()
 	timer.paused = true
+
+
+func update_time_between_toggles(new_wait_time: float) -> void:
+	timer.paused = true
+	timer.wait_time = new_wait_time
+	timer.paused = false	
 
 
 func _ready():
