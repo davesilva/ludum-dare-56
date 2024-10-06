@@ -38,13 +38,14 @@ func connect_snake_signals(snake_head: SnakeHead) -> void:
 	if not Game.events.snake.is_connected("completed_body_move", self, "_on_snake_completed_move"):
 		Game.events.snake.connect("completed_body_move", self, "_on_snake_completed_move")
 	
-	for p in a_star.get_points():
-		var point_label = Label.new()
-		point_label.text = str(p)
-		var p_tile_position = a_star.get_point_position(p)
-		var p_global_position = get_global_tile_position(p_tile_position)
-		point_label.set_global_position(p_global_position)
-		get_tree().root.add_child(point_label)
+	# Uncomment for grid numbers
+#	for p in a_star.get_points():
+#		var point_label = Label.new()
+#		point_label.text = str(p)
+#		var p_tile_position = a_star.get_point_position(p)
+#		var p_global_position = get_global_tile_position(p_tile_position)
+#		point_label.set_global_position(p_global_position)
+#		get_tree().root.add_child(point_label)
 		
 
 func remove_point(idx: int) -> void:

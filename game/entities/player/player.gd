@@ -63,11 +63,15 @@ func set_player_color(color: Color):
 
 
 func _have_been_caught(body):
+	if body == self:
+		_respawn()
+			
+
+func _respawn():
 	if is_network_master():
-		if body == self:
-			position = spawn_point
-			rset("puppet_motion", Vector2())
-			rset("puppet_pos", position)
+		position = spawn_point
+		rset("puppet_motion", Vector2())
+		rset("puppet_pos", position)
 		
 			
 func _place_bomb():
@@ -96,4 +100,5 @@ func _on_pickup_hotbox_area_entered(area):
 
 func _on_hurtbox_area_entered(area):
 	if area.is_in_group(Game.groups.hitboxes.explosion):
-		print("player hurt by bomb")
+		print("player killed by bomb")
+		_respawn()
