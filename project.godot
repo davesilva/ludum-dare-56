@@ -89,6 +89,11 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://addons/first_party/presentation/contexts/context_service.gd"
 }, {
+"base": "Node2D",
+"class": "CoolExplosion",
+"language": "GDScript",
+"path": "res://game/fx/cool_explosion.gd"
+}, {
 "base": "IntSequencer",
 "class": "CounterSequencer",
 "language": "GDScript",
@@ -476,6 +481,7 @@ _global_script_class_icons={
 "Component2D": "",
 "Context": "",
 "ContextPresentationService": "",
+"CoolExplosion": "",
 "CounterSequencer": "",
 "DictionaryEvent": "",
 "DirectionCalculator2D": "",

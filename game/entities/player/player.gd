@@ -72,11 +72,8 @@ func _place_bomb():
 	
 remotesync func _place_bomb_at_position(position: Vector2) -> void:
 	var bomb_instance = bomb_scene.instance()
-	if Game.world_service.gameplay_spawn_root:
-		Game.world_service.gameplay_spawn_root.add_child(bomb_instance)
-	else:
-		get_tree().root.add_child(bomb_instance)
-		
+	var bomb_parent = Game.world_service.get_spawn_root()
+	bomb_parent.add_child(bomb_instance)
 	bomb_instance.global_position = global_position
 	
 	

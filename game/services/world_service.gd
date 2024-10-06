@@ -52,6 +52,14 @@ func remove_point(idx: int) -> void:
 	for i in connected_points:
 		a_star.disconnect_points(idx, i)
 	a_star.remove_point(idx)
+	
+	
+func get_spawn_root():
+	if gameplay_spawn_root:
+		return gameplay_spawn_root
+	else:
+		return get_tree().root
+	
 
 func get_global_tile_position(tile_position: Vector2) -> Vector2:
 	if not world_tile_map:
