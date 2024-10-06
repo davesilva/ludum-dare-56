@@ -1,0 +1,25 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://addons/first_party/assets/basic_2d_assets/objects/apple/apple_filled.png" type="Texture" id=1]
+[ext_resource path="res://addons/first_party/sequencers/float/wave_sequencer.gd" type="Script" id=2]
+
+[sub_resource type="GDScript" id=1]
+script/source = "extends Sprite
+
+
+func _on_wave_sequencer_new_value(value):
+	offset.y = value
+"
+
+[node name="apple" type="Sprite"]
+modulate = Color( 1, 0, 0, 1 )
+scale = Vector2( 0.4, 0.4 )
+texture = ExtResource( 1 )
+script = SubResource( 1 )
+
+[node name="wave_sequencer" type="Node" parent="."]
+script = ExtResource( 2 )
+min_value = -20.0
+max_value = 0.0
+
+[connection signal="new_value" from="wave_sequencer" to="." method="_on_wave_sequencer_new_value"]

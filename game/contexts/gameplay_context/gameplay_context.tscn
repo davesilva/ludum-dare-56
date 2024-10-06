@@ -3,7 +3,7 @@
 [ext_resource path="res://game/contexts/gameplay_context/gameplay_context.gd" type="Script" id=1]
 [ext_resource path="res://game/world/game_world.tscn" type="PackedScene" id=2]
 [ext_resource path="res://game/entities/snake/snake_head.tscn" type="PackedScene" id=3]
-[ext_resource path="res://addons/first_party/assets/basic_2d_assets/objects/apple/apple_filled.png" type="Texture" id=4]
+[ext_resource path="res://game/items/apple.tscn" type="PackedScene" id=4]
 
 [node name="GameContext" type="Node"]
 script = ExtResource( 1 )
@@ -13,7 +13,4 @@ snake_scene = ExtResource( 3 )
 
 [node name="SNAKE" parent="." instance=ExtResource( 3 )]
 
-[node name="apple" type="Sprite" parent="."]
-modulate = Color( 1, 0, 0, 1 )
-scale = Vector2( 0.4, 0.4 )
-texture = ExtResource( 4 )
+[node name="apple" parent="." instance=ExtResource( 4 )]
