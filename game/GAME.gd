@@ -44,6 +44,7 @@ var players_ready = []
 
 var has_been_initialized = false
 var dedicated_server = false
+var single_player = false
 
 func _ready():
 	initialize_services()
@@ -98,7 +99,7 @@ func _process(delta):
 	if not has_been_initialized:
 		return
 	
-	if peer != null:
+	if peer != null and not single_player:
 		if get_tree().is_network_server():
 			if peer.is_listening():
 				peer.poll()
@@ -237,6 +238,7 @@ remote func ready_to_start(id):
 
 func begin_single_player_game():
 	player_name = "Player"
+	single_player = true
 	peer = NetworkedMultiplayerENet.new()
 	peer.create_server(DEFAULT_PORT, MAX_PEERS)
 	get_tree().set_network_peer(peer)
