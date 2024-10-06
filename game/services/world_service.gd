@@ -35,7 +35,7 @@ func on_game_initialize() -> void:
 	initialize_a_star()
 
 func connect_snake_signals(snake_head: SnakeHead) -> void:
-	snake_head.connect("completed_body_move", self, "_on_snake_completed_move")
+	Game.events.snake.connect("completed_body_move", self, "_on_snake_completed_move")
 	
 	for p in a_star.get_points():
 		var point_label = Label.new()
@@ -81,7 +81,7 @@ func get_random_tile_position_as_global() -> Vector2:
 	return get_global_tile_position(tile_position)
 	
 
-func _on_snake_completed_move(prev_pos, cur_pos) -> void:
+func _on_snake_completed_move() -> void:
 	add_snake_to_astar()
 
 func add_snake_to_astar() -> void:
@@ -99,6 +99,23 @@ func calculate_route_between_points(from: Vector2, to: Vector2) -> PoolVector2Ar
 	var to_id = tile_pos_to_idx(to)
 	var route =  a_star.get_point_path(from_id, to_id)
 	return route
+
+func find_valid_target(from: Vector2) -> PoolVector2Array:
+	var from_id = tile_pos_to_idx(from)
+	var corners = [
+		tile_pos_to_idx(Vector2(0, 0)),
+		tile_pos_to_idx(Vector2(WIDTH-1, 0)),
+		tile_pos_to_idx(Vector2(WIDTH-1, HEIGHT-1)),
+		tile_pos_to_idx(Vector2(0, HEIGHT-1))
+	]
+	var route = PoolVector2Array()
+	for p in corners + a_star.get_points():
+		if not a_star.is_point_disabled(p) and not p == from_id:
+			route = a_star.get_point_path(from_id, p)
+			if not route.empty():
+				return route
+	return PoolVector2Array()
+
 
 func tile_pos_to_idx(p: Vector2) -> int:
 	return p.y * WIDTH + p.x

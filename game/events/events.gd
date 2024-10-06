@@ -34,6 +34,8 @@ class EnemyEvents:
 
 class SnakeEvents:
 	signal target_captured()
+	signal snake_doomed()
+	signal completed_body_move()
 	
 
 class RoundEvents:
