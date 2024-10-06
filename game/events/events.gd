@@ -21,6 +21,7 @@ class SettingsEvents:
 
 
 class PlayerEvents:
+	signal player_picked_up_apple()
 	# signal player_spawned()
 	# signal player_hit()
 	# signal player_died()

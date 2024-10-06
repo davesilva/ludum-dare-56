@@ -11,7 +11,7 @@ onready var hotboxes: Hotboxes = Hotboxes.new()
 
 class Types:
 	const entity = "group.type.entity"
-	const object = "group.type.object"
+	const pickup = "group.type.pickup"
 	const environment = "group.type.environment"
 	
 
@@ -19,6 +19,7 @@ class Roots:
 	const player_character = "group.root.player_character"
 	const enemy = "group.root.enemy"
 	const snake = "group.root.snake"
+	const apple = "group.root.apple"
 #	const bullet = "group.root.bullet"
 #	const pickup = "group.root.pickup"
 	
@@ -46,7 +47,7 @@ class Hurtboxes:
 	
 	
 class Hotboxes:
-#	const player_pickup = "group.hotbox.player.pickup"
+	const pickup_apple = "group.hotbox.pickup.apple"
 #	const energy_pickup = "group.hotbox.energy.pickup"
 #	const enemy_fire_zone = "group.hotbox.enemy.fire.zone"
 	pass

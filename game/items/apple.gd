@@ -1,16 +1,10 @@
-extends Sprite
+extends Pickup
+class_name Apple
 
-
-# Declare member variables here. Examples:
-# var a = 2
-# var b = "text"
-
-
-# Called when the node enters the scene tree for the first time.
 func _ready():
-	pass # Replace with function body.
+	add_to_group(Game.groups.roots.apple)
+	$pickup_hotbox.add_to_group(Game.groups.hotboxes.pickup_apple)
 
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-#func _process(delta):
-#	pass
+func _on_wave_sequencer_new_value(value):
+	$sprite.offset.y = value

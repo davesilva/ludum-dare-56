@@ -1,13 +1,17 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://game/entities/player/mouse-outline.png" type="Texture" id=1]
 [ext_resource path="res://game/entities/player/player.gd" type="Script" id=2]
 [ext_resource path="res://game/entities/player/mouse.png" type="Texture" id=3]
 [ext_resource path="res://addons/first_party/sequencers/float/wave_sequencer.gd" type="Script" id=4]
+[ext_resource path="res://addons/first_party/components/areas/trigger_zone.gd" type="Script" id=5]
 
 [sub_resource type="CapsuleShape2D" id=1]
-radius = 30.0
+radius = 15.0
 height = 0.0
+
+[sub_resource type="CircleShape2D" id=2]
+radius = 30.0
 
 [node name="Player" type="KinematicBody2D"]
 scale = Vector2( 0.5, 0.5 )
@@ -29,4 +33,14 @@ min_value = -15.0
 max_value = 15.0
 min_to_max_time = 0.1
 
+[node name="pickup_hotbox" type="Area2D" parent="."]
+collision_layer = 2
+collision_mask = 4
+script = ExtResource( 5 )
+key_owner_path = NodePath("..")
+
+[node name="collision_shape_2d" type="CollisionShape2D" parent="pickup_hotbox"]
+shape = SubResource( 2 )
+
 [connection signal="new_value" from="wave_sequencer" to="." method="_on_wave_sequencer_new_value"]
+[connection signal="area_entered" from="pickup_hotbox" to="." method="_on_pickup_hotbox_area_entered"]

@@ -14,3 +14,4 @@ snake_scene = ExtResource( 3 )
 [node name="SNAKE" parent="." instance=ExtResource( 3 )]
 
 [node name="apple" parent="." instance=ExtResource( 4 )]
+scale = Vector2( 0.3, 0.3 )

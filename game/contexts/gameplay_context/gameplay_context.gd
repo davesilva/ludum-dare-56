@@ -16,6 +16,7 @@ func _ready():
 	place_target()
 	Game.events.snake.connect("target_captured", self, "_on_target_captured")
 	Game.events.snake.connect("snake_doomed", self, "_on_snake_doomed")
+	Game.events.player.connect("player_picked_up_apple", self, "_on_player_picked_up_apple")
 
 
 func _process(delta):
@@ -38,6 +39,10 @@ func _on_target_captured() -> void:
 
 func _on_snake_doomed() -> void:
 	rpc("_respawn_snake")
+	
+	
+func _on_player_picked_up_apple() -> void:
+	place_target()
 	
 
 puppetsync func _respawn_snake() -> void:

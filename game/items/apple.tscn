@@ -1,25 +1,27 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://addons/first_party/assets/basic_2d_assets/objects/apple/apple_filled.png" type="Texture" id=1]
 [ext_resource path="res://addons/first_party/sequencers/float/wave_sequencer.gd" type="Script" id=2]
+[ext_resource path="res://game/items/apple.gd" type="Script" id=3]
+[ext_resource path="res://game/items/pickup.tscn" type="PackedScene" id=4]
 
-[sub_resource type="GDScript" id=1]
-script/source = "extends Sprite
+[sub_resource type="CircleShape2D" id=1]
+radius = 60.0
 
+[node name="Apple" instance=ExtResource( 4 )]
+script = ExtResource( 3 )
 
-func _on_wave_sequencer_new_value(value):
-	offset.y = value
-"
-
-[node name="apple" type="Sprite"]
-modulate = Color( 1, 0, 0, 1 )
-scale = Vector2( 0.4, 0.4 )
+[node name="sprite" parent="." index="0"]
+self_modulate = Color( 1, 0, 0, 1 )
 texture = ExtResource( 1 )
-script = SubResource( 1 )
 
-[node name="wave_sequencer" type="Node" parent="."]
+[node name="collision_shape_2d" parent="pickup_hotbox" index="0"]
+shape = SubResource( 1 )
+
+[node name="wave_sequencer" type="Node" parent="." index="2"]
 script = ExtResource( 2 )
 min_value = -20.0
 max_value = 0.0
+min_to_max_time = 1.5
 
 [connection signal="new_value" from="wave_sequencer" to="." method="_on_wave_sequencer_new_value"]
