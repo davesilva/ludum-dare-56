@@ -254,6 +254,8 @@ func host_game(new_player_name):
 		push_error("Server not listening - maybe port is in use?")
 		peer = null
 		Game.context_service.go_to(TitleContext.CONTEXT_ID)
+		if dedicated_server:
+			get_tree().quit(1)
 	
 	get_tree().set_network_peer(peer)
 
