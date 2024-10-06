@@ -81,9 +81,7 @@ func refresh_lobby():
 	$Players/List.add_item(Game.get_player_name() + " (You)")
 	for p in players:
 		$Players/List.add_item(p)
-
-	print("NUM PLAYERS")
-	print(players.size())
+	
 	$Players/Start.disabled = players.size() < 2 and not get_tree().is_network_server()
 
 

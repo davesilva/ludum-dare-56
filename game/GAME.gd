@@ -249,7 +249,13 @@ func host_game(new_player_name):
 	player_name = new_player_name
 	peer = WebSocketServer.new()
 	peer.listen(DEFAULT_PORT, PoolStringArray(), true)
-	get_tree().set_network_peer(peer);
+	
+	if not peer.is_listening():
+		push_error("Server not listening - maybe port is in use?")
+		peer = null
+		Game.context_service.go_to(TitleContext.CONTEXT_ID)
+	
+	get_tree().set_network_peer(peer)
 
 
 func join_game(ip, new_player_name):
