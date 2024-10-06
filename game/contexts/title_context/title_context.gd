@@ -20,7 +20,7 @@ func _on_start_clicked():
 
 
 func _on_single_player_clicked():
-	change_context(GameplayContext.CONTEXT_ID)
+	Game.begin_single_player_game()
 
 
 func _on_go_to_game_pressed():

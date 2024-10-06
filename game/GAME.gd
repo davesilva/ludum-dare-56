@@ -227,6 +227,13 @@ remote func ready_to_start(id):
 		post_start_game()
 
 
+func begin_single_player_game():
+	player_name = "Player"
+	peer = NetworkedMultiplayerENet.new()
+	peer.create_server(DEFAULT_PORT, MAX_PEERS)
+	get_tree().set_network_peer(peer)
+	begin_game()
+
 func host_game(new_player_name):
 	player_name = new_player_name
 	peer = NetworkedMultiplayerENet.new()
