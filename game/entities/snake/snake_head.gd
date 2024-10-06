@@ -27,6 +27,8 @@ func _process(delta):
 			_target_captured()
 		move()
 		
+	_draw_line()
+		
 		
 func _input(event):
 	var input_vector = Vector2.ZERO
@@ -56,6 +58,18 @@ func move():
 	current_direction = next_direction
 	Game.events.snake.emit_signal("completed_body_move")
 	
+	
+func _draw_line():
+	var global_positions = [Vector2.ZERO]
+	var segments = segments_parent.get_children()
+	for segment_child in segments:
+		global_positions.append(segment_child.global_position - self.global_position)
+		
+	var snake_line = $line_2d as Line2D
+	snake_line.clear_points()
+	for point in global_positions:
+		snake_line.add_point(point)
+		
 	
 func move_segments():
 	var next_segment_position = tile_position
