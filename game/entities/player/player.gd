@@ -66,6 +66,11 @@ func _have_been_caught(body):
 		
 			
 func _place_bomb():
+	rpc("_place_bomb_at_position", global_position)
+	has_bomb = false
+	
+	
+remotesync func _place_bomb_at_position(position: Vector2) -> void:
 	var bomb_instance = bomb_scene.instance()
 	if Game.world_service.gameplay_spawn_root:
 		Game.world_service.gameplay_spawn_root.add_child(bomb_instance)
@@ -73,7 +78,6 @@ func _place_bomb():
 		get_tree().root.add_child(bomb_instance)
 		
 	bomb_instance.global_position = global_position
-	has_bomb = false
 	
 	
 func _on_wave_sequencer_new_value(value):
