@@ -35,7 +35,8 @@ func on_game_initialize() -> void:
 	initialize_a_star()
 
 func connect_snake_signals(snake_head: SnakeHead) -> void:
-	Game.events.snake.connect("completed_body_move", self, "_on_snake_completed_move")
+	if not Game.events.snake.is_connected("completed_body_move", self, "_on_snake_completed_move"):
+		Game.events.snake.connect("completed_body_move", self, "_on_snake_completed_move")
 	
 	for p in a_star.get_points():
 		var point_label = Label.new()

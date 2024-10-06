@@ -22,7 +22,7 @@ func _ready():
 
 
 func _process(delta):
-	if should_move:
+	if should_move and is_network_master():
 		if target_tile_position == tile_position:
 			_target_captured()
 		move()
@@ -51,7 +51,7 @@ func move():
 	should_move = false
 	next_direction = _get_a_star_next_direction()
 	var next_tile_position = tile_position + next_direction
-	move_to_tile_position(next_tile_position, speed)
+	rpc("move_to_tile_position", next_tile_position, speed)
 	move_segments()
 	current_direction = next_direction
 	Game.events.snake.emit_signal("completed_body_move")
@@ -68,7 +68,8 @@ func move_segments():
 			continue
 			
 		previous_segment_position = snake_segment.tile_position
-		snake_segment.move_to_tile_position(next_segment_position, speed)
+		snake_segment.rpc("move_to_tile_position", next_segment_position, speed)
+#		snake_segment.move_to_tile_position(next_segment_position, speed)
 		next_segment_position = previous_segment_position	
 
 	
@@ -145,10 +146,12 @@ func _target_captured() -> void:
 		var last_segment = last_child as SnakeSegment
 		if last_segment:
 			spawned_tile_position = last_segment.previous_tile_position
-			
-	var snake_segment_node = segment_scene.instance()
-	segments_parent.add_child(snake_segment_node)
-	snake_segment_node.place_at_tile_position(spawned_tile_position)
+		
+	rpc("_add_new_segment", spawned_tile_position)
 	Game.events.snake.emit_signal("target_captured")
 
 
+puppetsync func _add_new_segment(segment_tile_position: Vector2) -> void:
+	var snake_segment_node = segment_scene.instance()
+	segments_parent.add_child(snake_segment_node)
+	snake_segment_node.place_at_tile_position(segment_tile_position)

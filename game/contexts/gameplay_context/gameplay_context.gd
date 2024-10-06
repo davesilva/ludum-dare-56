@@ -18,7 +18,6 @@ func _ready():
 	Game.events.snake.connect("snake_doomed", self, "_on_snake_doomed")
 
 
-
 func _process(delta):
 	if puppet_apple_global_position != apple.global_position:
 		apple.global_position = puppet_apple_global_position
@@ -35,8 +34,13 @@ func place_target() -> void:
 
 func _on_target_captured() -> void:
 	place_target()
+	
 
 func _on_snake_doomed() -> void:
+	rpc("_respawn_snake")
+	
+
+puppetsync func _respawn_snake() -> void:
 	var snake = Game.entity_service.get_snake_root_node()
 	snake.queue_free()
 	var snake_head_node = snake_scene.instance()
