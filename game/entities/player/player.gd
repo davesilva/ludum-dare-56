@@ -25,6 +25,7 @@ func _ready():
 	Game.events.snake.connect("caught_player", self, "_have_been_caught")
 	add_to_group(Game.groups.roots.player_character)
 	hurtbox.add_to_group(Game.groups.hurtboxes.player)
+	$pickup_hotbox.add_to_group(Game.groups.hotboxes.player_pickups)
 
 
 func _physics_process(delta):

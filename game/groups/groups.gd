@@ -52,6 +52,7 @@ class Hurtboxes:
 	
 	
 class Hotboxes:
+	const player_pickups = "group.hotbox.player.pickups"
 	const pickup_apple = "group.hotbox.pickup.apple"
 	const pickup_bomb = "group.hotbox.pickup.bomb"
 	const speed_pad = "group.hotbox.speed.pad"
