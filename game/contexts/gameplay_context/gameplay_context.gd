@@ -27,6 +27,11 @@ func _ready():
 	Game.connect("player_ready", self, "_on_player_ready")
 	Game.connect("player_disconnected", self, "_on_player_disconnected")
 	Game.camera_service.active_camera = $camera_2d
+	var player_sync_timer = Timer.new()
+	add_child(player_sync_timer)
+	player_sync_timer.wait_time = 1.0
+	player_sync_timer.connect("timeout", self, "_on_player_sync")
+	player_sync_timer.start()
 	
 	win_overlay.visible = false
 	lose_overlay.visible = false
@@ -68,7 +73,16 @@ func _on_player_disconnected(id) -> void:
 	for player_node in player_nodes:
 		if player_node.get_name() == str(id):
 			player_node.queue_free()
-	
+
+
+func _on_player_sync():
+	var player_nodes = Game.world_service.players.get_children()
+	var peers = get_tree().get_network_connected_peers()
+	for player_node in player_nodes:
+		var id = int(player_node.get_name())
+		if not id in peers and id != get_tree().get_network_unique_id():
+			print('Removing stale player ' + str(id))
+			player_node.queue_free()
 
 func _on_new_round_state_data(state_data: RoundState.RoundStateData) -> void:
 	player_apples_label.text = "PLAYER APPLES: " + str(state_data.total_player_apples_acquired)
