@@ -364,6 +364,11 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://addons/first_party/components/movement/speed/speed_calculator.gd"
 }, {
+"base": "Node2D",
+"class": "SpeedPad",
+"language": "GDScript",
+"path": "res://game/items/speed_pad.gd"
+}, {
 "base": "Component",
 "class": "Spinner",
 "language": "GDScript",
@@ -536,6 +541,7 @@ _global_script_class_icons={
 "Spawner2D": "",
 "SpawnerDummy": "",
 "SpeedCalculator": "",
+"SpeedPad": "",
 "Spinner": "",
 "SplitTriggerTheme": "",
 "State": "",
