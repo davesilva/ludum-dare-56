@@ -139,7 +139,22 @@ puppet func sync_segments(positions_array: Array) -> void:
 			var segment = segments[index] as SnakeSegment
 			segment.move_to_tile_position(tile_position, get_speed())
 
-	
+
+func reset():
+	hit_points = MAX_HEALTH
+	for seg in segments_parent.get_children():
+		seg.queue_free()
+	tile_position = Vector2.ZERO
+	previous_tile_position = Vector2.ZERO
+	puppet_tile_position = Vector2.ZERO
+	current_direction = Vector2.RIGHT
+	next_direction = Vector2.ZERO
+	target_tile_position = Vector2.ZERO
+	place_at_tile_position(tile_position)
+	if self.tween != null:
+		self.tween.kill()
+
+
 func _on_completed_move(old_tile_position: Vector2, new_tile_position: Vector2) -> void:
 	should_move = true
 	

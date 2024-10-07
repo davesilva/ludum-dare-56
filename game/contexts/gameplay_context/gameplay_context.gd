@@ -60,6 +60,5 @@ func _on_player_disconnected(id) -> void:
 
 puppetsync func _respawn_snake() -> void:
 	var snake = Game.entity_service.get_snake_root_node()
-	snake.queue_free()
-	var snake_head_node = snake_scene.instance()
-	self.add_child(snake_head_node)
+	snake.reset()
+	

@@ -9,6 +9,8 @@ onready var tile_position = Vector2.ZERO
 
 puppet var puppet_tile_position: Vector2
 
+var tween: SceneTreeTween
+
 func _ready():
 	$hurtbox.add_to_group(Game.groups.hurtboxes.snake)
 	
@@ -16,7 +18,7 @@ func _ready():
 puppetsync func move_to_tile_position(p_tile_position: Vector2, tween_speed: float) -> void:
 	var old_tile_position = tile_position
 	var next_global_position = Game.world_service.get_global_tile_position(p_tile_position)
-	var tween = create_tween()
+	tween = create_tween()
 	tween.tween_property(self, "global_position", next_global_position, 1.0 / tween_speed)
 	yield(tween, "finished")
 	tile_position = p_tile_position

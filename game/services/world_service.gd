@@ -96,13 +96,16 @@ func _on_snake_completed_move() -> void:
 
 func add_snake_to_astar() -> void:
 	for a in a_star.get_points():
-		a_star.set_point_disabled(a, false)
+		if a_star.has_point(a):
+			a_star.set_point_disabled(a, false)
 	var snake_poses = Game.entity_service.get_snake_positions()
 	for p in snake_poses:
-		a_star.set_point_disabled(tile_pos_to_idx(p))
+		if a_star.has_point(tile_pos_to_idx(p)):
+			a_star.set_point_disabled(tile_pos_to_idx(p))
 	if snake_poses.size() == 1:
 		var from_spot = (-1 * Game.entity_service.get_snake_direction()) + snake_poses[0]
-		a_star.set_point_disabled(tile_pos_to_idx(from_spot))
+		if a_star.has_point(tile_pos_to_idx(from_spot)):
+			a_star.set_point_disabled(tile_pos_to_idx(from_spot))
 		
 func calculate_route_between_points(from: Vector2, to: Vector2) -> PoolVector2Array:
 	var from_id = tile_pos_to_idx(from)
@@ -120,7 +123,7 @@ func find_valid_target(from: Vector2) -> PoolVector2Array:
 	]
 	var route = PoolVector2Array()
 	for p in corners + a_star.get_points():
-		if not a_star.is_point_disabled(p) and not p == from_id:
+		if a_star.has_point(p) and not a_star.is_point_disabled(p) and not p == from_id:
 			route = a_star.get_point_path(from_id, p)
 			if not route.empty():
 				return route
