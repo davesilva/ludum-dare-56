@@ -1,9 +1,27 @@
-[gd_scene load_steps=2 format=2]
+[gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://game/contexts/title_context/title_context.gd" type="Script" id=1]
+[ext_resource path="res://addons/first_party/assets/fonts/boldstrom_d.otf" type="DynamicFontData" id=2]
+[ext_resource path="res://addons/first_party/assets/fonts/nk57_monospace.ttf" type="DynamicFontData" id=3]
+[ext_resource path="res://game/entities/player/mouse_02_body.PNG" type="Texture" id=4]
+[ext_resource path="res://game/entities/player/mouse_02_outline.PNG" type="Texture" id=5]
+[ext_resource path="res://game/items/apple.PNG" type="Texture" id=6]
+
+[sub_resource type="DynamicFont" id=1]
+size = 120
+font_data = ExtResource( 2 )
+
+[sub_resource type="DynamicFont" id=2]
+size = 61
+font_data = ExtResource( 3 )
 
 [node name="TitleContext" type="Node"]
 script = ExtResource( 1 )
+
+[node name="ColorRect" type="ColorRect" parent="."]
+margin_right = 1279.0
+margin_bottom = 711.0
+color = Color( 0.67451, 0.541176, 0.305882, 1 )
 
 [node name="start_button" type="Button" parent="."]
 anchor_left = 0.4
@@ -21,3 +39,41 @@ anchor_bottom = 0.8
 margin_top = 81.0
 margin_bottom = 101.0
 text = "SINGLE PLAYER"
+
+[node name="RichTextLabel" type="RichTextLabel" parent="."]
+modulate = Color( 0.87451, 1, 0, 1 )
+margin_left = 318.0
+margin_top = 118.0
+margin_right = 978.0
+margin_bottom = 432.0
+custom_fonts/normal_font = SubResource( 1 )
+bbcode_enabled = true
+bbcode_text = "[center][wave amp=50.0 freq=5.0 connected=1]bombing[/wave]"
+text = "bombing"
+
+[node name="Label" type="Label" parent="."]
+modulate = Color( 0.717647, 0.027451, 0.027451, 1 )
+margin_left = 482.0
+margin_top = 271.0
+margin_right = 802.0
+margin_bottom = 404.0
+custom_fonts/font = SubResource( 2 )
+text = "for apples"
+align = 1
+valign = 1
+
+[node name="Sprite" type="Sprite" parent="."]
+self_modulate = Color( 0.831373, 0.584314, 1, 1 )
+position = Vector2( 230, 460 )
+rotation = -0.232502
+scale = Vector2( 7.48, 7.48 )
+texture = ExtResource( 4 )
+
+[node name="Sprite" type="Sprite" parent="Sprite"]
+texture = ExtResource( 5 )
+
+[node name="Sprite2" type="Sprite" parent="."]
+position = Vector2( 1027, 484 )
+rotation = 0.46621
+scale = Vector2( 8.16, 8.16 )
+texture = ExtResource( 6 )
