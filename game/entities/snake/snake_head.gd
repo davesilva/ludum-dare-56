@@ -6,8 +6,8 @@ const MAX_HEALTH = 100
 signal completed_body_move()
 
 export (PackedScene) var segment_scene
-export (float) var min_speed = 3 # tiles per second
-export (float) var max_speed = 5 # tiles per second
+export (float) var min_speed = 2 # tiles per second
+export (float) var max_speed = 4 # tiles per second
 
 onready var segments_parent: Node2D = $segments_parent
 onready var current_direction = Vector2.RIGHT
