@@ -2,9 +2,11 @@ extends KinematicBody2D
 class_name Player
 
 export (float) var time_to_burrow = 1
+export (Color) var filled_pip_color
+export (Color) var empty_pip_color
 export (PackedScene) var bomb_scene
 
-const SPEED = 100.0
+const SPEED = 150.0
 
 puppet var puppet_pos = Vector2()
 puppet var puppet_motion = Vector2()
@@ -14,10 +16,11 @@ onready var hurtbox: TriggerZone = $hurtbox
 onready var casts: Node2D = $casts
 onready var wall_cast: RayCast2D = $casts/anchor/wall_cast
 onready var space_cast: Area2D = $casts/anchor/space_cast
+onready var pips: Array = [$HBoxContainer/pip_1, $HBoxContainer/pip_2, $HBoxContainer/pip_3]
 
 var player_name = "Player"
 var speed_boost_direction = Vector2.ZERO
-var has_bomb = false
+var bomb_count = 0
 var time_burrowing = 0
 
 func _ready():
@@ -26,6 +29,7 @@ func _ready():
 	add_to_group(Game.groups.roots.player_character)
 	hurtbox.add_to_group(Game.groups.hurtboxes.player)
 	$pickup_hotbox.add_to_group(Game.groups.hotboxes.player_pickups)
+	_update_bomb_pips()
 
 
 func _physics_process(delta):
@@ -41,7 +45,7 @@ func _physics_process(delta):
 		if Input.is_action_pressed("standard_move_down"):
 			motion += Vector2(0, 1)
 			
-		if Input.is_action_just_pressed("ui_accept") and has_bomb:
+		if Input.is_action_just_pressed("ui_accept") and bomb_count > 0:
 			_place_bomb()
 			
 		motion = motion.normalized()
@@ -88,6 +92,8 @@ func _respawn():
 		position = spawn_point
 		rset("puppet_motion", Vector2())
 		rset("puppet_pos", position)
+		bomb_count = 0
+		_update_bomb_pips()
 		Game.events.player.emit_signal("player_died")
 		
 		
@@ -112,7 +118,16 @@ func _no_burrow():
 			
 func _place_bomb():
 	rpc("_place_bomb_at_position", global_position)
-	has_bomb = false
+	bomb_count -= 1
+	bomb_count = clamp(bomb_count, 0, 3)
+	_update_bomb_pips()
+	
+	
+func _update_bomb_pips():
+	var index = 0
+	for pip in pips:
+		pip.self_modulate = filled_pip_color if index < bomb_count else empty_pip_color
+		index += 1
 	
 	
 remotesync func _place_bomb_at_position(position: Vector2) -> void:
@@ -130,7 +145,9 @@ func _on_pickup_hotbox_area_entered(area):
 	if area.is_in_group(Game.groups.hotboxes.pickup_apple):
 		Game.events.player.emit_signal("player_picked_up_apple")
 	elif area.is_in_group(Game.groups.hotboxes.pickup_bomb):
-		has_bomb = true
+		bomb_count += 1
+		bomb_count = clamp(bomb_count, 0, 3)
+		_update_bomb_pips()
 		print("picked up bomb")
 	elif area.is_in_group(Game.groups.hotboxes.speed_pad):
 		var speed_pad = TriggerZone.get_owner_from(area)

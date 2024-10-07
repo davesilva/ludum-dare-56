@@ -8,7 +8,7 @@ export (PackedScene) var explosion_scene
 
 onready var sprite: Sprite = $sprite
 
-var flashes_remaining = 6
+var flashes_remaining = 4
 
 func _ready():
 	sprite.self_modulate = black_color
