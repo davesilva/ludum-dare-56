@@ -80,7 +80,6 @@ percent_visible = false
 [node name="casts" type="Node2D" parent="."]
 
 [node name="vision_cone" type="Area2D" parent="casts"]
-scale = Vector2( 1, 1 )
 
 [node name="vision_cone_shape" type="CollisionPolygon2D" parent="casts/vision_cone"]
 polygon = PoolVector2Array( 0, 0, 480, -320, 480, 320 )

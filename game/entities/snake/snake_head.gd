@@ -18,6 +18,7 @@ onready var health_bar: ProgressBar = $health_bar
 var hit_points = MAX_HEALTH
 var should_move = true
 var target_player: Player = null
+puppetsync var bloodlust = false
 
 
 func _ready():
@@ -33,7 +34,12 @@ func _process(delta):
 		if target_tile_position == tile_position:
 			_target_captured()
 		move()
-		
+	
+	if bloodlust:
+		$head_sprite.self_modulate = Color.red
+	else:
+		$head_sprite.self_modulate = Color.green
+	
 	_draw_line()
 	health_bar.value = get_hit_point_percentage()
 		
@@ -183,6 +189,8 @@ func _on_new_target_placed(p_target_tile_position: Vector2) -> void:
 
 func _on_clear_target_player():
 	target_player = null
+	rset("bloodlust", false)
+	print("Snake chilling out")
 
 
 func _get_a_star_next_direction():
@@ -193,6 +201,8 @@ func _get_a_star_next_direction():
 		for player in Game.world_service.players.get_children():
 			if $casts/vision_cone.overlaps_body(player):
 				target_player = player
+				rset("bloodlust", true)
+				print("Snake targeting player " + player.get_name())
 				next_target = Game.world_service.get_tile_position_from_global(player.position)
 				Wait.on(self, 5.0).connect("timeout", self, "_on_clear_target_player")
 
