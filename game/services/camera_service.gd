@@ -24,6 +24,9 @@ func _ready():
 	
 
 func _process(delta):
+	if get_tree().is_network_server():
+		return
+	
 	var random_x_shake = Random.randf_range(-shake_amount, shake_amount)
 	var random_y_shake = Random.randf_range(-shake_amount, shake_amount)
 	var random_shake = Vector2(random_x_shake, random_y_shake)
@@ -44,7 +47,7 @@ func start_screen_shake(amount: float, time: float, limit: float) -> void:
 
 
 func shake(new_shake: float, shake_time: float = 0.4, shake_limit: float = 100.0):
-	if not is_shake_enabled:
+	if not is_shake_enabled or get_tree().is_network_server():
 		return 
 		
 	var settings_scalar = 1.0 #GameSettings.camera().get_screenshake_intensity_scalar()

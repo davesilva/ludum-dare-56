@@ -13,14 +13,15 @@ func _on_pickup_hotbox_area_entered(area):
 
 
 func _get_picked_up():
-	var random_tile_position = Game.world_service.get_random_tile_position()
-	Game.world_service.place_object_at_tile_position(self, random_tile_position)
+	#var random_tile_position = Game.world_service.get_random_tile_position()
+	#Game.world_service.place_object_at_tile_position(self, random_tile_position)
 	$sprite.visible = false
-	$pickup_hotbox.monitorable = false
-	$pickup_hotbox.monitoring = false
+	$pickup_hotbox.set_deferred("monitorable", false)
+	$pickup_hotbox.set_deferred("monitoring", false)
 
 
 func _on_player_picked_up_apple():
 	$sprite.visible = true
-	$pickup_hotbox.monitorable = true
-	$pickup_hotbox.monitoring = true
+	$pickup_hotbox.set_deferred("monitorable", true)
+	$pickup_hotbox.set_deferred("monitoring", true)
+
