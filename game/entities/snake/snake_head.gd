@@ -129,7 +129,9 @@ func move_segments():
 puppet func sync_segments(positions_array: Array) -> void:
 	# given an array of positions, set, add (and maybe delete) any segments 
 	var segments = segments_parent.get_children()
-	# TODO: if there are mre segments than positions we need to handle that
+	if segments.size() > positions_array.size():
+		for segment in segments:
+			segment.queue_free()
 	for index in positions_array.size():
 		var tile_position = positions_array[index]
 		
