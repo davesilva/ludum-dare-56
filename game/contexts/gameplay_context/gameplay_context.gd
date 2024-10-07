@@ -58,15 +58,15 @@ func _on_player_picked_up_apple() -> void:
 	place_target()
 	
 func _on_player_connected(id) -> void:
-	print('PLAYER CONNECTED')
-	pass
+	if is_network_master():
+		rset_id(id, "puppet_apple_global_position", puppet_apple_global_position)
+
 
 func _on_player_disconnected(id) -> void:
 	var player_nodes = Game.world_service.players.get_children()
 	for player_node in player_nodes:
 		if player_node.get_name() == str(id):
 			player_node.queue_free()
-	pass
 	
 
 func _on_new_round_state_data(state_data: RoundState.RoundStateData) -> void:

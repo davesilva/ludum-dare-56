@@ -199,6 +199,8 @@ remote func register_player(new_player_name):
 	print("Player connected: " + str(id))
 	players[id] = new_player_name
 	emit_signal("player_list_changed")
+	if get_tree().is_network_server() and context_service.current_context.context_id_string() == GameplayContext.CONTEXT_ID: # Game is in progress.
+		begin_game()
 
 
 func unregister_player(id):
@@ -208,6 +210,7 @@ func unregister_player(id):
 		available_spawn_point_indices.push_back(index)
 	spawn_point_indices.erase(id)
 	colors.erase(id)
+	players_ready.erase(id)
 	print("Player disconnected: " + str(id))
 	emit_signal("player_list_changed")
 
@@ -244,7 +247,7 @@ remote func pre_start_game(spawn_point_indices, colors: Array):
 
 
 remote func post_start_game():
-	get_tree().set_pause(false) # Unpause and unleash the game!
+	pass
 
 
 remote func spawn_late_joiner(p_id, spawn_point_index, color):
