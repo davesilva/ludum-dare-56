@@ -161,6 +161,7 @@ func _get_backup_direction():
 	var route = Game.world_service.find_valid_target(tile_position)
 	if route.empty():
 		Game.events.snake.emit_signal("snake_doomed")
+		Game.events.snake.emit_signal("snake_died")
 		# this shouldn't matter
 		return current_direction
 	route.remove(0)

@@ -75,6 +75,7 @@ func _respawn():
 		position = spawn_point
 		rset("puppet_motion", Vector2())
 		rset("puppet_pos", position)
+		Game.events.player.emit_signal("player_died")
 		
 			
 func _place_bomb():
