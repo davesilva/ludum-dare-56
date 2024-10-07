@@ -17,6 +17,8 @@ onready var health_bar: ProgressBar = $health_bar
 
 var hit_points = MAX_HEALTH
 var should_move = true
+var target_player: Player = null
+
 
 func _ready():
 	place_at_tile_position(tile_position)
@@ -178,11 +180,21 @@ func _get_backup_direction():
 func _on_new_target_placed(p_target_tile_position: Vector2) -> void:
 	target_tile_position = p_target_tile_position
 
+
+func _on_clear_target_player():
+	target_player = null
+
+
 func _get_a_star_next_direction():
 	var next_target = target_tile_position
-	for player in Game.world_service.players.get_children():
-		if $casts/vision_cone.overlaps_body(player):
-			next_target = Game.world_service.get_tile_position_from_global(player.position)
+	if target_player != null:
+		next_target = Game.world_service.get_tile_position_from_global(target_player.position)
+	else:
+		for player in Game.world_service.players.get_children():
+			if $casts/vision_cone.overlaps_body(player):
+				target_player = player
+				next_target = Game.world_service.get_tile_position_from_global(player.position)
+				Wait.on(self, 5.0).connect("timeout", self, "_on_clear_target_player")
 
 	var route_to_target = Game.world_service.calculate_route_between_points(tile_position, next_target)
 	if route_to_target.empty():
