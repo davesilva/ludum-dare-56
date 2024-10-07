@@ -1,11 +1,15 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://game/contexts/gameplay_context/gameplay_context.gd" type="Script" id=1]
 [ext_resource path="res://game/world/game_world.tscn" type="PackedScene" id=2]
 [ext_resource path="res://game/entities/snake/snake_head.tscn" type="PackedScene" id=3]
 [ext_resource path="res://game/items/apple.tscn" type="PackedScene" id=4]
 [ext_resource path="res://game/contexts/gameplay_context/round_state.gd" type="Script" id=5]
-[ext_resource path="res://examples/event_bus_examples/rgb_buddies/color_bar.gd" type="Script" id=6]
+[ext_resource path="res://addons/first_party/assets/fonts/boldstrom_d.otf" type="DynamicFontData" id=6]
+
+[sub_resource type="DynamicFont" id=1]
+size = 100
+font_data = ExtResource( 6 )
 
 [node name="GameContext" type="Node"]
 script = ExtResource( 1 )
@@ -25,29 +29,30 @@ scale = Vector2( 0.3, 0.3 )
 position = Vector2( 641, 358 )
 current = true
 
-[node name="Control" type="Control" parent="."]
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="Control" type="Control" parent="CanvasLayer"]
 anchor_right = 1.0
 anchor_bottom = 1.0
 
-[node name="ColorBar" type="ColorRect" parent="Control"]
+[node name="ColorRect" type="ColorRect" parent="CanvasLayer/Control"]
 margin_left = 1040.0
 margin_top = 440.0
 margin_right = 1279.0
 margin_bottom = 716.0
 color = Color( 0.101961, 0.0588235, 0.0588235, 1 )
-script = ExtResource( 6 )
 
-[node name="Control" type="Control" parent="Control"]
+[node name="Control" type="Control" parent="CanvasLayer/Control"]
 margin_left = 1040.0
 margin_top = 440.0
 margin_right = 1279.0
 margin_bottom = 716.0
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Control/Control"]
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/Control/Control"]
 anchor_right = 1.0
 anchor_bottom = 1.0
 
-[node name="player_apples_label" type="Label" parent="Control/Control/VBoxContainer"]
+[node name="player_apples_label" type="Label" parent="CanvasLayer/Control/Control/VBoxContainer"]
 unique_name_in_owner = true
 margin_right = 239.0
 margin_bottom = 40.0
@@ -55,7 +60,7 @@ rect_min_size = Vector2( 0, 40 )
 custom_colors/font_color = Color( 1, 1, 1, 1 )
 text = "TEXT"
 
-[node name="player_deaths_label" type="Label" parent="Control/Control/VBoxContainer"]
+[node name="player_deaths_label" type="Label" parent="CanvasLayer/Control/Control/VBoxContainer"]
 unique_name_in_owner = true
 margin_top = 44.0
 margin_right = 239.0
@@ -64,7 +69,7 @@ rect_min_size = Vector2( 0, 40 )
 custom_colors/font_color = Color( 1, 1, 1, 1 )
 text = "TEXT"
 
-[node name="snake_apples_label" type="Label" parent="Control/Control/VBoxContainer"]
+[node name="snake_apples_label" type="Label" parent="CanvasLayer/Control/Control/VBoxContainer"]
 unique_name_in_owner = true
 margin_top = 88.0
 margin_right = 239.0
@@ -73,7 +78,7 @@ rect_min_size = Vector2( 0, 40 )
 custom_colors/font_color = Color( 1, 1, 1, 1 )
 text = "TEXT"
 
-[node name="snake_deaths_label" type="Label" parent="Control/Control/VBoxContainer"]
+[node name="snake_deaths_label" type="Label" parent="CanvasLayer/Control/Control/VBoxContainer"]
 unique_name_in_owner = true
 margin_top = 132.0
 margin_right = 239.0
@@ -81,3 +86,47 @@ margin_bottom = 172.0
 rect_min_size = Vector2( 0, 40 )
 custom_colors/font_color = Color( 1, 1, 1, 1 )
 text = "TEXT"
+
+[node name="win_overlay" type="Control" parent="CanvasLayer/Control"]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="ColorRect" type="ColorRect" parent="CanvasLayer/Control/win_overlay"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color( 0.701961, 0.968627, 0.792157, 1 )
+
+[node name="Label" type="Label" parent="CanvasLayer/Control/win_overlay"]
+self_modulate = Color( 0, 0, 0, 1 )
+anchor_left = 0.2
+anchor_top = 0.2
+anchor_right = 0.8
+anchor_bottom = 0.5
+margin_bottom = 14.0
+custom_fonts/font = SubResource( 1 )
+text = "MICE WIN!"
+align = 1
+valign = 1
+
+[node name="lose_overlay" type="Control" parent="CanvasLayer/Control"]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="ColorRect" type="ColorRect" parent="CanvasLayer/Control/lose_overlay"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color( 0.968627, 0.701961, 0.713726, 1 )
+
+[node name="Label" type="Label" parent="CanvasLayer/Control/lose_overlay"]
+self_modulate = Color( 0, 0, 0, 1 )
+anchor_left = 0.2
+anchor_top = 0.2
+anchor_right = 0.8
+anchor_bottom = 0.5
+margin_bottom = 14.0
+custom_fonts/font = SubResource( 1 )
+text = "SNAKE WINS"
+align = 1
+valign = 1

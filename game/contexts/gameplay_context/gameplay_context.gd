@@ -5,10 +5,12 @@ const CONTEXT_ID = "context.gameplay"
 export (PackedScene) var snake_scene
 
 onready var apple = $apple
-onready var player_apples_label: Label = $Control/Control/VBoxContainer/player_apples_label
-onready var player_deaths_label: Label = $Control/Control/VBoxContainer/player_deaths_label
-onready var snake_apples_label: Label = $Control/Control/VBoxContainer/snake_apples_label
-onready var snake_deaths_label: Label = $Control/Control/VBoxContainer/snake_deaths_label
+onready var player_apples_label: Label = $CanvasLayer/Control/Control/VBoxContainer/player_apples_label
+onready var player_deaths_label: Label = $CanvasLayer/Control/Control/VBoxContainer/player_deaths_label
+onready var snake_apples_label: Label = $CanvasLayer/Control/Control/VBoxContainer/snake_apples_label
+onready var snake_deaths_label: Label = $CanvasLayer/Control/Control/VBoxContainer/snake_deaths_label
+onready var win_overlay: Control = $CanvasLayer/Control/win_overlay
+onready var lose_overlay: Control = $CanvasLayer/Control/lose_overlay
 
 puppetsync var puppet_apple_global_position = Vector2.ZERO
 
@@ -25,6 +27,9 @@ func _ready():
 	Game.connect("player_connected", self, "_on_player_connected")
 	Game.connect("player_disconnected", self, "_on_player_disconnected")
 	Game.camera_service.active_camera = $camera_2d
+	
+	win_overlay.visible = false
+	lose_overlay.visible = false
 
 
 func _process(delta):
@@ -69,6 +74,17 @@ func _on_new_round_state_data(state_data: RoundState.RoundStateData) -> void:
 	player_deaths_label.text = "PLAYER DEATHS: " + str(state_data.total_player_deaths)
 	snake_apples_label.text = "SNAKE APPLES: " + str(state_data.total_snake_apples_acquired)
 	snake_deaths_label.text = "SNAKE DEATHS: " + str(state_data.total_snake_deaths)
+	
+	match state_data.status:
+		RoundState.RoundStatus.MICE_WIN:
+			win_overlay.visible = true
+			lose_overlay.visible = false
+		RoundState.RoundStatus.SNAKE_WIN:
+			win_overlay.visible = false
+			lose_overlay.visible = true
+		RoundState.RoundStatus.IN_PROGRESS:
+			win_overlay.visible = false
+			lose_overlay.visible = false
 
 
 puppetsync func _respawn_snake() -> void:
