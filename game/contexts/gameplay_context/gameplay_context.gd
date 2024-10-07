@@ -11,6 +11,7 @@ onready var snake_apples_label: Label = $CanvasLayer/Control/Control/VBoxContain
 onready var snake_deaths_label: Label = $CanvasLayer/Control/Control/VBoxContainer/snake_deaths_label
 onready var win_overlay: Control = $CanvasLayer/Control/win_overlay
 onready var lose_overlay: Control = $CanvasLayer/Control/lose_overlay
+onready var meter: ProgressBar = $CanvasLayer/Control/top_control/match_progress
 
 puppetsync var puppet_apple_global_position = Vector2.ZERO
 
@@ -85,10 +86,11 @@ func _on_player_sync():
 			player_node.queue_free()
 
 func _on_new_round_state_data(state_data: RoundState.RoundStateData) -> void:
-	player_apples_label.text = "PLAYER APPLES: " + str(state_data.total_player_apples_acquired)
-	player_deaths_label.text = "PLAYER DEATHS: " + str(state_data.total_player_deaths)
-	snake_apples_label.text = "SNAKE APPLES: " + str(state_data.total_snake_apples_acquired)
-	snake_deaths_label.text = "SNAKE DEATHS: " + str(state_data.total_snake_deaths)
+#	player_apples_label.text = "PLAYER APPLES: " + str(state_data.total_player_apples_acquired)
+#	player_deaths_label.text = "PLAYER DEATHS: " + str(state_data.total_player_deaths)
+#	snake_apples_label.text = "SNAKE APPLES: " + str(state_data.total_snake_apples_acquired)
+#	snake_deaths_label.text = "SNAKE DEATHS: " + str(state_data.total_snake_deaths)
+	meter.value = state_data.get_meter_percent()
 	
 	match state_data.status:
 		RoundState.RoundStatus.MICE_WIN:
