@@ -62,7 +62,7 @@ func _physics_process(delta):
 		puppet_pos = position # To avoid jitter
 		
 	casts.rotation_degrees = rad2deg(motion.angle())
-	if wall_cast.is_colliding() and space_cast.get_overlapping_bodies().size() == 0:
+	if motion != Vector2.ZERO and wall_cast.is_colliding() and space_cast.get_overlapping_bodies().size() == 0:
 		# we are free to start/continue burrowing
 		_burrow(delta)
 	else:

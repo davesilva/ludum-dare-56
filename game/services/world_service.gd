@@ -25,7 +25,7 @@ func initialize_a_star() -> void:
 		var connected_points = a_star.get_point_connections(p)
 #		print_debug(str(p) + " is connected to " + str(connected_points))
 	# Add walls
-	var wall_tiles = world_tile_map.get_used_cells_by_id(1)
+	var wall_tiles = world_tile_map.get_used_cells_by_id(7)
 	var walls = []
 	for wt in wall_tiles:
 		walls.append(tile_pos_to_idx(wt))
