@@ -37,3 +37,4 @@ func _place_explosion():
 	var explosion_parent = Game.world_service.get_spawn_root()
 	explosion_parent.add_child(explosion_instance)
 	explosion_instance.global_position = self.global_position
+	Game.camera_service.start_screen_shake(500, 0.3, 1000)

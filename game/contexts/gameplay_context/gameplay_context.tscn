@@ -15,3 +15,7 @@ snake_scene = ExtResource( 3 )
 
 [node name="apple" parent="." instance=ExtResource( 4 )]
 scale = Vector2( 0.3, 0.3 )
+
+[node name="camera_2d" type="Camera2D" parent="."]
+position = Vector2( 641, 358 )
+current = true

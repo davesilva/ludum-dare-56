@@ -19,6 +19,7 @@ func _ready():
 	Game.events.player.connect("player_picked_up_apple", self, "_on_player_picked_up_apple")
 	Game.connect("player_connected", self, "_on_player_connected")
 	Game.connect("player_disconnected", self, "_on_player_disconnected")
+	Game.camera_service.active_camera = $camera_2d
 
 
 func _process(delta):
