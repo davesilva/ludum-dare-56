@@ -15,7 +15,7 @@ onready var next_direction = Vector2.ZERO
 onready var target_tile_position = Vector2.ZERO
 onready var health_bar: ProgressBar = $health_bar
 
-var hit_points = MAX_HEALTH
+var hit_points = 1 #MAX_HEALTH
 var should_move = true
 var target_player: Player = null
 puppetsync var bloodlust = false
@@ -90,6 +90,9 @@ func _on_segment_take_damage(amount: int) -> void:
 	
 puppetsync func take_damage(amount: int) -> void:
 	hit_points -= amount
+	
+	if hit_points <= 0:
+		Game.events.snake.emit_signal("snake_killed")
 
 		
 func move():
@@ -176,7 +179,6 @@ func _get_backup_direction():
 	var route = Game.world_service.find_valid_target(tile_position)
 	if route.empty():
 		Game.events.snake.emit_signal("snake_doomed")
-		Game.events.snake.emit_signal("snake_died")
 		# this shouldn't matter
 		return current_direction
 	route.remove(0)

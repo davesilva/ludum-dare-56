@@ -23,6 +23,7 @@ func _ready():
 	place_target()
 	Game.events.snake.connect("target_captured", self, "_on_target_captured")
 	Game.events.snake.connect("snake_doomed", self, "_on_snake_doomed")
+	Game.events.snake.connect("snake_killed", self, "_on_snake_killed")
 	Game.events.player.connect("player_picked_up_apple", self, "_on_player_picked_up_apple")
 	Game.events.game_round.connect("new_round_state_data", self, "_on_new_round_state_data")
 	Game.connect("player_ready", self, "_on_player_ready")
@@ -60,6 +61,10 @@ func _on_snake_doomed() -> void:
 	rpc("_respawn_snake")
 	
 	
+func _on_snake_killed() -> void:
+	rpc("_respawn_snake")
+	
+	
 func _on_player_picked_up_apple() -> void:
 	place_target()
 
@@ -84,6 +89,7 @@ func _on_player_sync():
 		if not id in peers and id != get_tree().get_network_unique_id():
 			print('Removing stale player ' + str(id))
 			player_node.queue_free()
+
 
 func _on_new_round_state_data(state_data: RoundState.RoundStateData) -> void:
 #	player_apples_label.text = "PLAYER APPLES: " + str(state_data.total_player_apples_acquired)

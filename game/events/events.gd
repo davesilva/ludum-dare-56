@@ -19,10 +19,10 @@ class PlayerEvents:
 
 class SnakeEvents:
 	signal target_captured()
-	signal snake_doomed()
+	signal snake_doomed() # eats itself
 	signal completed_body_move()
 	signal caught_player(body)
-	signal snake_died()
+	signal snake_killed() # by player bomb
 	
 
 class RoundEvents:

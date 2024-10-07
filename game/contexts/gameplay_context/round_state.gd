@@ -62,7 +62,8 @@ static func create_data_from_dictionary(dict: Dictionary) -> RoundStateData:
 
 func _ready():
 	Game.events.snake.connect("target_captured", self, "_on_target_captured")
-	Game.events.snake.connect("snake_died", self, "_on_snake_died")
+	Game.events.snake.connect("snake_doomed", self, "_on_snake_doomed")
+	Game.events.snake.connect("snake_killed", self, "_on_snake_killed")
 	Game.events.player.connect("player_picked_up_apple", self, "_on_player_picked_up_apple")
 	Game.events.player.connect("player_died", self, "_on_player_died")
 	
@@ -75,13 +76,22 @@ func _on_target_captured():
 	data.meter -= 5
 	broadcast_latest()
 	
-
-func _on_snake_died():
+	
+func _on_snake_doomed():
 	if data.status != RoundStatus.IN_PROGRESS:
 		return 
 		
 	data.total_snake_deaths += 1
 	data.meter += 10
+	broadcast_latest()
+	
+
+func _on_snake_killed():
+	if data.status != RoundStatus.IN_PROGRESS:
+		return 
+		
+	data.total_snake_deaths += 1
+	data.meter += 50
 	broadcast_latest()
 	
 
