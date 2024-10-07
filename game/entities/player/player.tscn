@@ -167,6 +167,15 @@ texture = ExtResource( 9 )
 expand = true
 stretch_mode = 5
 
+[node name="name" type="Label" parent="."]
+margin_left = -192.0
+margin_top = 62.6667
+margin_right = 1.0
+margin_bottom = 92.6667
+rect_scale = Vector2( 2, 2 )
+align = 1
+valign = 1
+
 [connection signal="new_value" from="wave_sequencer" to="." method="_on_wave_sequencer_new_value"]
 [connection signal="area_entered" from="pickup_hotbox" to="." method="_on_pickup_hotbox_area_entered"]
 [connection signal="area_entered" from="hurtbox" to="." method="_on_hurtbox_area_entered"]

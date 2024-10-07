@@ -200,11 +200,11 @@ func _on_clear_target_player():
 
 func _get_a_star_next_direction():
 	var next_target = target_tile_position
-	if target_player != null:
+	if target_player != null and is_instance_valid(target_player):
 		next_target = Game.world_service.get_tile_position_from_global(target_player.position)
 	else:
 		for player in Game.world_service.players.get_children():
-			if $casts/vision_cone.overlaps_body(player):
+			if is_instance_valid(player) and $casts/vision_cone.overlaps_body(player):
 				target_player = player
 				rset("bloodlust", true)
 				print("Snake targeting player " + player.get_name())

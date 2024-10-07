@@ -18,7 +18,7 @@ onready var wall_cast: RayCast2D = $casts/anchor/wall_cast
 onready var space_cast: Area2D = $casts/anchor/space_cast
 onready var pips: Array = [$HBoxContainer/pip_1, $HBoxContainer/pip_2, $HBoxContainer/pip_3]
 
-var player_name = "Player"
+var player_name = ""
 var speed_boost_direction = Vector2.ZERO
 var bomb_count = 0
 var time_burrowing = 0
@@ -29,6 +29,7 @@ func _ready():
 	add_to_group(Game.groups.roots.player_character)
 	hurtbox.add_to_group(Game.groups.hurtboxes.player)
 	$pickup_hotbox.add_to_group(Game.groups.hotboxes.player_pickups)
+	$name.text = player_name
 	_update_bomb_pips()
 
 
@@ -76,6 +77,7 @@ func _physics_process(delta):
 
 func set_player_name(name):
 	player_name = name
+	$name.text = name
 	
 
 func set_player_color(color: Color):
