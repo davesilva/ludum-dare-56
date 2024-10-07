@@ -26,6 +26,7 @@ signal game_ended()
 signal game_error(what)
 signal player_connected(id)
 signal player_disconnected(id)
+signal player_ready(id)
 
 # Default game server port. Can be any number between 1024 and 49151.
 # Not on the list of registered or common ports as of November 2020:
@@ -270,6 +271,7 @@ remote func spawn_late_joiner(p_id, spawn_point_index, color):
 remote func ready_to_start(id):
 	assert(get_tree().is_network_server())
 
+	emit_signal("player_ready", id)
 	if not id in players_ready:
 		players_ready.append(id)
 

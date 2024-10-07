@@ -24,7 +24,7 @@ func _ready():
 	Game.events.snake.connect("snake_doomed", self, "_on_snake_doomed")
 	Game.events.player.connect("player_picked_up_apple", self, "_on_player_picked_up_apple")
 	Game.events.game_round.connect("new_round_state_data", self, "_on_new_round_state_data")
-	Game.connect("player_connected", self, "_on_player_connected")
+	Game.connect("player_ready", self, "_on_player_ready")
 	Game.connect("player_disconnected", self, "_on_player_disconnected")
 	Game.camera_service.active_camera = $camera_2d
 	
@@ -57,7 +57,7 @@ func _on_snake_doomed() -> void:
 func _on_player_picked_up_apple() -> void:
 	place_target()
 	
-func _on_player_connected(id) -> void:
+func _on_player_ready(id) -> void:
 	if is_network_master():
 		rset_id(id, "puppet_apple_global_position", puppet_apple_global_position)
 
