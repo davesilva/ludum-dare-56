@@ -33,7 +33,7 @@ signal player_disconnected(id)
 const DEFAULT_PORT = 10567
 
 # Max number of players.
-const MAX_PEERS = 4
+const NUM_SPAWN_POINTS = 8
 
 var peer = null
 
@@ -278,7 +278,7 @@ func begin_single_player_game():
 	player_name = "Player"
 	single_player = true
 	peer = NetworkedMultiplayerENet.new()
-	peer.create_server(DEFAULT_PORT, MAX_PEERS)
+	peer.create_server(DEFAULT_PORT, NUM_SPAWN_POINTS)
 	get_tree().set_network_peer(peer)
 	begin_game()
 
@@ -342,7 +342,9 @@ remote func begin_game():
 	
 	# Create a dictionary with peer id and respective spawn point index
 	spawn_point_indices = {}
-	available_spawn_point_indices = [3,2,1,0]
+	available_spawn_point_indices = []
+	for i in NUM_SPAWN_POINTS:
+		available_spawn_point_indices.push_front(i)
 	colors = create_color_array(available_spawn_point_indices.size())
 	players_ready = []
 	if not dedicated_server:
