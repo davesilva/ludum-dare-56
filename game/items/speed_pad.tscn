@@ -21,3 +21,9 @@ key_owner_path = NodePath("..")
 
 [node name="collision_shape_2d" type="CollisionShape2D" parent="hotbox"]
 shape = SubResource( 1 )
+
+[node name="rotation_timer" type="Timer" parent="."]
+wait_time = 3.0
+autostart = true
+
+[connection signal="timeout" from="rotation_timer" to="." method="_on_rotation_timer_timeout"]
