@@ -1,6 +1,7 @@
 extends KinematicBody2D
 class_name Player
 
+export (float) var time_to_burrow = 1
 export (PackedScene) var bomb_scene
 
 const SPEED = 100.0
@@ -10,10 +11,14 @@ puppet var puppet_motion = Vector2()
 var spawn_point = Vector2()
 
 onready var hurtbox: TriggerZone = $hurtbox
+onready var casts: Node2D = $casts
+onready var wall_cast: RayCast2D = $casts/anchor/wall_cast
+onready var space_cast: Area2D = $casts/anchor/space_cast
 
 var player_name = "Player"
 var speed_boost_direction = Vector2.ZERO
 var has_bomb = false
+var time_burrowing = 0
 
 func _ready():
 	puppet_pos = position
@@ -22,7 +27,7 @@ func _ready():
 	hurtbox.add_to_group(Game.groups.hurtboxes.player)
 
 
-func _physics_process(_delta):
+func _physics_process(delta):
 	var motion = Vector2()
 
 	if is_network_master():
@@ -55,6 +60,13 @@ func _physics_process(_delta):
 	move_and_slide(motion * SPEED)
 	if not is_network_master():
 		puppet_pos = position # To avoid jitter
+		
+	casts.rotation_degrees = rad2deg(motion.angle())
+	if wall_cast.is_colliding() and space_cast.get_overlapping_bodies().size() == 0:
+		# we are free to start/continue burrowing
+		_burrow(delta)
+	else:
+		_no_burrow()
 
 
 func set_player_name(name):
@@ -76,6 +88,25 @@ func _respawn():
 		rset("puppet_motion", Vector2())
 		rset("puppet_pos", position)
 		Game.events.player.emit_signal("player_died")
+		
+		
+func _burrow(delta: float):
+	$burrow_bar.visible = true
+	time_burrowing += delta
+	
+	if speed_boost_direction != Vector2.ZERO:
+		# burrow faster if boosterd
+		time_burrowing += delta
+	
+	$burrow_bar.value = time_burrowing / time_to_burrow
+	if time_burrowing >= time_to_burrow:
+		position = space_cast.global_position
+		time_burrowing = 0
+		
+	
+func _no_burrow():
+	$burrow_bar.visible = false
+	time_burrowing = 0
 		
 			
 func _place_bomb():
