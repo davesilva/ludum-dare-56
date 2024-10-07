@@ -1,7 +1,7 @@
 [gd_scene load_steps=4 format=2]
 
 [ext_resource path="res://game/items/pickup.tscn" type="PackedScene" id=1]
-[ext_resource path="res://addons/first_party/assets/basic_2d_assets/polygons/diamond/diamond_heavy.png" type="Texture" id=2]
+[ext_resource path="res://game/items/bomb_pickup.PNG" type="Texture" id=2]
 [ext_resource path="res://game/items/pickup_bomb.gd" type="Script" id=3]
 
 [node name="BombPickup" instance=ExtResource( 1 )]

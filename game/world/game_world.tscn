@@ -261,19 +261,15 @@ position = Vector2( 1180, 300 )
 
 [node name="BombPickup" parent="." instance=ExtResource( 4 )]
 position = Vector2( 620, 660 )
-scale = Vector2( 0.3, 0.3 )
 
 [node name="BombPickup2" parent="." instance=ExtResource( 4 )]
 position = Vector2( 1220, 260 )
-scale = Vector2( 0.3, 0.3 )
 
 [node name="BombPickup3" parent="." instance=ExtResource( 4 )]
 position = Vector2( 60, 500 )
-scale = Vector2( 0.3, 0.3 )
 
 [node name="BombPickup4" parent="." instance=ExtResource( 4 )]
 position = Vector2( 220, 180 )
-scale = Vector2( 0.3, 0.3 )
 
 [node name="spawn_root" type="Node2D" parent="."]
 

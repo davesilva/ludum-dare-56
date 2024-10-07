@@ -11,6 +11,7 @@ scale = Vector2( 0.8, 0.8 )
 script = ExtResource( 2 )
 
 [node name="arrows" type="Sprite" parent="."]
+modulate = Color( 0.988235, 1, 0.6, 1 )
 texture = ExtResource( 1 )
 
 [node name="hotbox" type="Area2D" parent="."]
