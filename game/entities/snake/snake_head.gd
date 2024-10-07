@@ -15,7 +15,7 @@ onready var next_direction = Vector2.ZERO
 onready var target_tile_position = Vector2.ZERO
 onready var health_bar: ProgressBar = $health_bar
 
-var hit_points = 1 #MAX_HEALTH
+var hit_points = MAX_HEALTH
 var should_move = true
 var target_player: Player = null
 puppetsync var bloodlust = false
@@ -170,6 +170,7 @@ func reset():
 	place_at_tile_position(tile_position)
 	if self.tween != null:
 		self.tween.kill()
+	should_move = true
 
 
 func _on_completed_move(old_tile_position: Vector2, new_tile_position: Vector2) -> void:
