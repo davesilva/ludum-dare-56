@@ -18,9 +18,12 @@ func _ready():
 puppetsync func move_to_tile_position(p_tile_position: Vector2, tween_speed: float) -> void:
 	var old_tile_position = tile_position
 	var next_global_position = Game.world_service.get_global_tile_position(p_tile_position)
-	tween = create_tween()
-	tween.tween_property(self, "global_position", next_global_position, 1.0 / tween_speed)
-	yield(tween, "finished")
+	if global_position.distance_to(next_global_position) < 150:
+		tween = create_tween()
+		tween.tween_property(self, "global_position", next_global_position, 1.0 / tween_speed)
+		yield(tween, "finished")
+	else:
+		global_position = next_global_position
 	tile_position = p_tile_position
 	previous_tile_position = old_tile_position
 	emit_signal("completed_move", previous_tile_position, tile_position)

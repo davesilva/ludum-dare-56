@@ -56,7 +56,8 @@ func _on_snake_doomed() -> void:
 	
 func _on_player_picked_up_apple() -> void:
 	place_target()
-	
+
+
 func _on_player_ready(id) -> void:
 	if is_network_master():
 		rset_id(id, "puppet_apple_global_position", puppet_apple_global_position)
