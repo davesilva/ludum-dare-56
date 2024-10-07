@@ -167,6 +167,8 @@ func reset():
 	puppet_tile_position = Vector2.ZERO
 	current_direction = Vector2.RIGHT
 	next_direction = Vector2.ZERO
+	bloodlust = false
+	target_player = null
 	place_at_tile_position(tile_position)
 	if self.tween != null:
 		self.tween.kill()

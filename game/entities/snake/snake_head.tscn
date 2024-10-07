@@ -12,7 +12,7 @@
 radius = 20.0
 
 [sub_resource type="RectangleShape2D" id=2]
-extents = Vector2( 20, 20 )
+extents = Vector2( 50, 50 )
 
 [sub_resource type="StyleBoxFlat" id=3]
 bg_color = Color( 1, 0, 0, 1 )
@@ -79,6 +79,6 @@ percent_visible = false
 [node name="vision_cone" type="Area2D" parent="casts"]
 
 [node name="vision_cone_shape" type="CollisionPolygon2D" parent="casts/vision_cone"]
-polygon = PoolVector2Array( 0, 0, 480, -320, 480, 320 )
+polygon = PoolVector2Array( 0, 0, 160, -104, 160, 104 )
 
 [connection signal="body_entered" from="." to="." method="_on_SNAKE_body_entered"]
