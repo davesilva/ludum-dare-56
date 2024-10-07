@@ -265,9 +265,6 @@ position = Vector2( 620, 660 )
 [node name="BombPickup2" parent="." instance=ExtResource( 4 )]
 position = Vector2( 1220, 260 )
 
-[node name="BombPickup3" parent="." instance=ExtResource( 4 )]
-position = Vector2( 60, 500 )
-
 [node name="BombPickup4" parent="." instance=ExtResource( 4 )]
 position = Vector2( 220, 180 )
 

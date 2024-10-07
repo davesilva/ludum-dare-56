@@ -147,7 +147,10 @@ func _on_wave_sequencer_new_value(value):
 func _on_pickup_hotbox_area_entered(area):
 	if area.is_in_group(Game.groups.hotboxes.pickup_apple):
 		Game.events.player.emit_signal("player_picked_up_apple")
-	elif area.is_in_group(Game.groups.hotboxes.pickup_bomb):
+	elif area.is_in_group(Game.groups.hotboxes.pickup_bomb) and bomb_count == 0:
+		var bomb_pickup = TriggerZone.get_owner_from(area) as BombPickup
+		if bomb_pickup:
+			bomb_pickup._get_picked_up()
 		bomb_count += 1
 		bomb_count = clamp(bomb_count, 0, MAX_BOMB_COUNT)
 		_update_bomb_pips()
