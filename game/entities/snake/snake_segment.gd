@@ -19,6 +19,7 @@ puppetsync func move_to_tile_position(p_tile_position: Vector2, tween_speed: flo
 	var old_tile_position = tile_position
 	var next_global_position = Game.world_service.get_global_tile_position(p_tile_position)
 	if global_position.distance_to(next_global_position) < 150:
+		rotate_to(global_position.angle_to_point(next_global_position) + PI)
 		tween = create_tween()
 		tween.tween_property(self, "global_position", next_global_position, 1.0 / tween_speed)
 		yield(tween, "finished")
@@ -27,6 +28,10 @@ puppetsync func move_to_tile_position(p_tile_position: Vector2, tween_speed: flo
 	tile_position = p_tile_position
 	previous_tile_position = old_tile_position
 	emit_signal("completed_move", previous_tile_position, tile_position)
+
+
+func rotate_to(radians: float):
+	pass
 
 
 func place_at_tile_position(give_tile_position: Vector2) -> void:

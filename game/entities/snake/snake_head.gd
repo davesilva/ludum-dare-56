@@ -106,6 +106,11 @@ func _draw_line():
 		snake_line.add_point(point)
 		
 	
+func rotate_to(radians: float):
+	$head_sprite.rotation = radians
+	$casts.rotation = radians
+	
+	
 func move_segments():
 	var next_segment_position = tile_position
 	var previous_segment_position
@@ -174,7 +179,12 @@ func _on_new_target_placed(p_target_tile_position: Vector2) -> void:
 	target_tile_position = p_target_tile_position
 
 func _get_a_star_next_direction():
-	var route_to_target = Game.world_service.calculate_route_between_points(tile_position, target_tile_position)
+	var next_target = target_tile_position
+	for player in Game.world_service.players.get_children():
+		if $casts/vision_cone.overlaps_body(player):
+			next_target = Game.world_service.get_tile_position_from_global(player.position)
+
+	var route_to_target = Game.world_service.calculate_route_between_points(tile_position, next_target)
 	if route_to_target.empty():
 		return _get_backup_direction()
 	if route_to_target[0] == tile_position:
