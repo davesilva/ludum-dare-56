@@ -215,10 +215,12 @@ func unregister_player(id):
 	emit_signal("player_list_changed")
 
 
-remote func pre_start_game(spawn_point_indices, colors: Array):
+remote func pre_start_game(spawn_point_indices, colors: Array, server_players: Dictionary):
+	print("PRE START GAME")
 	context_service.go_to(GameplayContext.CONTEXT_ID, false)
 	var player_scene = load("res://game/entities/player/player.tscn")
 
+	players.merge(server_players, true)
 	for p_id in spawn_point_indices:
 		var spawn_point_index = spawn_point_indices[p_id]
 		var spawn_pos = Game.world_service.spawn_points[spawn_point_index].position
@@ -331,7 +333,7 @@ remote func begin_game():
 			return
 		print("Player " + str(new_player_id) + " joined a game in progress with spawn point " + str(spawn_point_idx))
 		spawn_point_indices[new_player_id] = spawn_point_idx
-		rpc_id(new_player_id, "pre_start_game", spawn_point_indices, colors)
+		rpc_id(new_player_id, "pre_start_game", spawn_point_indices, colors, players)
 		
 		for p in players:
 			if p != new_player_id:
@@ -365,9 +367,9 @@ remote func begin_game():
 	# Call to pre-start game with the spawn points.
 	for p in players:
 		print("Starting game on " + str(p))
-		rpc_id(p, "pre_start_game", spawn_point_indices, colors)
+		rpc_id(p, "pre_start_game", spawn_point_indices, colors, players)
 	
-	pre_start_game(spawn_point_indices, colors)
+	pre_start_game(spawn_point_indices, colors, players)
 
 
 func end_game():
