@@ -80,7 +80,6 @@ func get_tile_position_from_global(global_position: Vector2) -> Vector2:
 	var local_position = world_tile_map.to_local(global_position)
 	var cell_size = world_tile_map.cell_size
 	var half_cell = cell_size / 2
-	local_position -= half_cell
 	return world_tile_map.world_to_map(local_position)
 	
 	
