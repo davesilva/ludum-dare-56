@@ -80,9 +80,21 @@ func _on_new_round_state_data(state_data: RoundState.RoundStateData) -> void:
 		RoundState.RoundStatus.MICE_WIN:
 			win_overlay.visible = true
 			lose_overlay.visible = false
+			get_tree().network_peer.disconnect_from_host()
+			get_tree().paused = true
+			var timer = Wait.on(get_tree().root, 5.0)
+			timer.pause_mode = PAUSE_MODE_PROCESS
+			yield(timer, Wait.END)
+			Game.end_game()
 		RoundState.RoundStatus.SNAKE_WIN:
 			win_overlay.visible = false
 			lose_overlay.visible = true
+			get_tree().network_peer.disconnect_from_host()
+			get_tree().paused = true
+			var timer = Wait.on(get_tree().root, 5.0)
+			timer.pause_mode = PAUSE_MODE_PROCESS
+			yield(timer, Wait.END)
+			Game.end_game()
 		RoundState.RoundStatus.IN_PROGRESS:
 			win_overlay.visible = false
 			lose_overlay.visible = false

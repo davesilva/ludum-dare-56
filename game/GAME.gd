@@ -380,6 +380,7 @@ func end_game():
 
 	emit_signal("game_ended")
 	players.clear()
+	get_tree().paused = false
 	
 	
 func create_color_array(number_of_colors: int) -> Array:
