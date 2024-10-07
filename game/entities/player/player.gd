@@ -7,6 +7,7 @@ export (Color) var empty_pip_color
 export (PackedScene) var bomb_scene
 
 const SPEED = 150.0
+const MAX_BOMB_COUNT = 1
 
 puppet var puppet_pos = Vector2()
 puppet var puppet_motion = Vector2()
@@ -121,7 +122,7 @@ func _no_burrow():
 func _place_bomb():
 	rpc("_place_bomb_at_position", global_position)
 	bomb_count -= 1
-	bomb_count = clamp(bomb_count, 0, 3)
+	bomb_count = clamp(bomb_count, 0, MAX_BOMB_COUNT)
 	_update_bomb_pips()
 	
 	
@@ -148,7 +149,7 @@ func _on_pickup_hotbox_area_entered(area):
 		Game.events.player.emit_signal("player_picked_up_apple")
 	elif area.is_in_group(Game.groups.hotboxes.pickup_bomb):
 		bomb_count += 1
-		bomb_count = clamp(bomb_count, 0, 3)
+		bomb_count = clamp(bomb_count, 0, MAX_BOMB_COUNT)
 		_update_bomb_pips()
 		print("picked up bomb")
 	elif area.is_in_group(Game.groups.hotboxes.speed_pad):

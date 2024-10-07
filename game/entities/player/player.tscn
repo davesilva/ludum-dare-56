@@ -116,10 +116,12 @@ margin_right = 44.6667
 margin_bottom = 58.0
 rect_min_size = Vector2( 90, 30 )
 custom_constants/separation = 15
+alignment = 1
 
 [node name="pip_1" type="TextureRect" parent="HBoxContainer"]
 self_modulate = Color( 0.603922, 1, 0.129412, 1 )
-margin_right = 20.0
+margin_left = 35.0
+margin_right = 55.0
 margin_bottom = 30.0
 rect_min_size = Vector2( 20, 20 )
 texture = ExtResource( 8 )
@@ -134,9 +136,10 @@ expand = true
 stretch_mode = 5
 
 [node name="pip_2" type="TextureRect" parent="HBoxContainer"]
+visible = false
 self_modulate = Color( 0.603922, 1, 0.129412, 1 )
-margin_left = 35.0
-margin_right = 55.0
+margin_left = 52.0
+margin_right = 72.0
 margin_bottom = 30.0
 rect_min_size = Vector2( 20, 20 )
 texture = ExtResource( 8 )
@@ -151,6 +154,7 @@ expand = true
 stretch_mode = 5
 
 [node name="pip_3" type="TextureRect" parent="HBoxContainer"]
+visible = false
 self_modulate = Color( 0.603922, 1, 0.129412, 1 )
 margin_left = 70.0
 margin_right = 90.0
