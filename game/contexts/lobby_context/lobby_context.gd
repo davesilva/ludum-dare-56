@@ -17,8 +17,15 @@ func _ready():
 	$Connect/Name.text = "Player"
 	if OS.has_feature("web"):
 		$Connect/Host.hide()
-		$Connect/IPLabel.hide()
-		$Connect/IPAddress.hide()
+		$Connect/URLLabel.hide()
+		$Connect/URL.hide()
+		
+		var host = JavaScript.eval("window.location.hostname")
+		var port = JavaScript.eval("new URLSearchParams(window.location.search).get('ws_port')")
+		if port == null:
+			port = str(Game.DEFAULT_PORT)
+		
+		$Connect/URL.text = "ws://" + host + ":" + port
 
 
 
@@ -41,14 +48,14 @@ func _on_join_pressed():
 		$Connect/ErrorLabel.text = "Invalid name!"
 		return
 
-	var ip = $Connect/IPAddress.text
+	var url = $Connect/URL.text
 
 	$Connect/ErrorLabel.text = ""
 	$Connect/Host.disabled = true
 	$Connect/Join.disabled = true
 
 	var player_name = $Connect/Name.text
-	Game.join_game(ip, player_name)
+	Game.join_game(url, player_name)
 
 
 func _on_connection_success():

@@ -1,0 +1,21 @@
+services:
+  server:
+    build: .
+    ports:
+      - "10568:10568"
+    platform: linux/amd64
+  web:
+    build:
+      context: .
+      dockerfile_inline: |
+        FROM davesilva/godot-ci:3.5.3 AS build
+        WORKDIR /root
+        RUN mkdir -p /root/build
+        COPY . /root
+        RUN godot --no-window --verbose --export "HTML5" build/index.html
+
+        FROM nginx AS run
+        COPY --from=build /root/build /usr/share/nginx/html
+    ports:
+      - "8080:80"
+    platform: linux/amd64

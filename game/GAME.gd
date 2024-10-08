@@ -28,10 +28,7 @@ signal player_connected(id)
 signal player_disconnected(id)
 signal player_ready(id)
 
-# Default game server port. Can be any number between 1024 and 49151.
-# Not on the list of registered or common ports as of November 2020:
-# https://en.wikipedia.org/wiki/List_of_TCP_and_UDP_port_numbers
-const DEFAULT_PORT = 10567
+const DEFAULT_PORT = 10568
 
 # Max number of players.
 const NUM_SPAWN_POINTS = 8
@@ -305,10 +302,9 @@ func host_game(new_player_name):
 	get_tree().set_network_peer(peer)
 
 
-func join_game(ip, new_player_name):
+func join_game(url, new_player_name):
 	player_name = new_player_name
 	peer = WebSocketClient.new()
-	var url = "ws://" + ip + ":" + str(DEFAULT_PORT)
 	var error = peer.connect_to_url(url, PoolStringArray(), true)
 	get_tree().set_network_peer(peer)
 

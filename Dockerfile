@@ -11,7 +11,7 @@ RUN godot --no-window --verbose --export-pack "Linux/X11" build/server-bundle.pc
 
 FROM davesilva/godot-ci:3.5.3 AS run
 
-EXPOSE 10567
+EXPOSE 10568
 COPY --from=build /root/build/server-bundle.pck /root/server-bundle.pck
 
 ENTRYPOINT [ "godot", "--no-window", "--main-pack", "/root/server-bundle.pck", "-" ]
